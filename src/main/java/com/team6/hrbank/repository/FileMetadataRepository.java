@@ -1,9 +1,9 @@
 package com.team6.hrbank.repository;
 
-import com.team6.hrbank.entity.BackupHistories;
 import com.team6.hrbank.entity.FileMetadata;
+import java.util.Optional;
 
 public interface FileMetadataRepository {
-  FileMetadata findById(long id);
+  Optional<FileMetadata> findById(Long id);
 
 }
