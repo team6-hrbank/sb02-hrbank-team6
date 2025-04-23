@@ -14,6 +14,8 @@ public enum ErrorCode implements Code {
   //EMPLOYEE
   EMPLOYEE_NOT_FOUND(HttpStatus.NOT_FOUND, "직원을 찾을 수 없습니다."),
   DUPLICATE_EMPLOYEE(HttpStatus.CONFLICT, "이미 존재하는 직원입니다."),
+  EMAIL_ALREADY_EXISTS(HttpStatus.CONFLICT, "이미 사용 중인 이메일입니다."),
+
 
   //DEPARTMENT
   DEPARTMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "부서를 찾을 수 없습니다."),
