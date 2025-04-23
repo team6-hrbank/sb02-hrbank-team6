@@ -1,0 +1,35 @@
+spring:
+  application:
+    name: hrbank
+  servlet:
+    multipart:
+      maxFileSize: 20MB
+      maxRequestSize: 40MB
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/hrbank
+    username: hrbank_user
+    password: hrbank1234
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+    #        default_batch_fetch_size: 100
+    open-in-view: false
+
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.hibernate.orm.jdbc.bind: trace
+
+hrbank:
+  storage:
+    type: local
+    local:
+      root-path: .hrbank/storage
+
+file:
+  upload-dir: test_fileDirs

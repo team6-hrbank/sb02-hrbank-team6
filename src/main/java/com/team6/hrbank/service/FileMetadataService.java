@@ -7,7 +7,6 @@ import java.util.UUID;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface FileMetadataService {
-
   Optional<FileMetadata> findById(Long id);
   FileMetadata create(MultipartFile file);
 

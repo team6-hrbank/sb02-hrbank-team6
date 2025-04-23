@@ -17,7 +17,12 @@ public enum ErrorCode implements Code {
 
   //DEPARTMENT
   DEPARTMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "부서를 찾을 수 없습니다."),
-  DUPLICATE_DEPARTMENT(HttpStatus.CONFLICT, "이미 존재하는 부서입니다.");
+  DUPLICATE_DEPARTMENT(HttpStatus.CONFLICT, "이미 존재하는 부서입니다."),
+
+  //FILE METADATA
+  FILE_SAVE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "파일 저장에 실패했습니다."),
+  FILE_NOT_FOUND(HttpStatus.NOT_FOUND, "파일이 존재하지 않습니다.");
+
 
 
   private final HttpStatus status;
