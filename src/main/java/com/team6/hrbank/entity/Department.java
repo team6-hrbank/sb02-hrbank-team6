@@ -1,5 +1,6 @@
 package com.team6.hrbank.entity;
 
+import com.team6.hrbank.dto.department.DepartmentUpdateRequest;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -42,6 +43,12 @@ public class Department {
 
   public int getEmployeeCount() {
     return employees != null ? employees.size() : 0;
+  }
+
+  public void update(DepartmentUpdateRequest request) {
+    this.departmentName = request.name();
+    this.departmentDescription = request.description();
+    this.departmentEstablishedDate = request.establishedDate();
   }
 
 }
