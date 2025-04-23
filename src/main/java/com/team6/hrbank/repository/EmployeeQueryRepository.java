@@ -8,6 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface EmployeeQueryRepository extends JpaRepository<Employee, Long> {
   long countByDepartmentIdAndEmployeeState(Long departmentId, EmployeeState employeeState);
 
-  long countByPositionAndEmployeeState(EmployeePosition position, EmployeeState employeeState);
+  long countByEmployeePositionAndEmployeeState(EmployeePosition position, EmployeeState employeeState);
 
 }
