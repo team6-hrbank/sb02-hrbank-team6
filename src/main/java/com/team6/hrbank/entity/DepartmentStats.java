@@ -20,7 +20,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
-@Table(name = "department-stats",
+@Table(name = "department_stats",
     uniqueConstraints = {
         @UniqueConstraint(
             name = "uq_department_state_date",
