@@ -13,9 +13,9 @@ public interface DepartmentMapper {
   @Mapping(source = "establishedDate", target = "departmentEstablishedDate")
   Department toEntity(DepartmentCreateRequest request);
 
-  @Mapping(source = "departmentName", target = "name")
-  @Mapping(source = "departmentDescription", target = "description")
-  @Mapping(source = "departmentEstablishedDate", target = "establishedDate")
-  @Mapping(target = "employeeCount", expression = "java((long) department.getEmployeeCount())")
-  DepartmentDto toDto(Department department);
+  @Mapping(source = "department.departmentName", target = "name")
+  @Mapping(source = "department.departmentDescription", target = "description")
+  @Mapping(source = "department.departmentEstablishedDate", target = "establishedDate")
+  @Mapping(source = "employeeCount", target = "employeeCount")
+  DepartmentDto toDto(Department department, Long employeeCount);
 }
