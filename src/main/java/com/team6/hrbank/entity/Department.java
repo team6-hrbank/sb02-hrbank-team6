@@ -38,13 +38,6 @@ public class Department {
   @Column(name = "department_established_date", nullable = false)
   private LocalDate departmentEstablishedDate;
 
-  @OneToMany(mappedBy = "department", fetch = FetchType.LAZY)
-  private List<Employee> employees = new ArrayList<>();
-
-  public int getEmployeeCount() {
-    return employees != null ? employees.size() : 0;
-  }
-
   public void update(DepartmentUpdateRequest request) {
     this.departmentName = request.name();
     this.departmentDescription = request.description();
