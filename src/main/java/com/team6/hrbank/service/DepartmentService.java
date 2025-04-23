@@ -9,6 +9,6 @@ public interface DepartmentService {
   DepartmentDto create(DepartmentCreateRequest request);
   DepartmentDto findById(Long id);
   List<DepartmentDto> findAll();
-  DepartmentDto update(DepartmentUpdateRequest request);
+  DepartmentDto update(Long id, DepartmentUpdateRequest request);
   void deleteById(Long id);
 }

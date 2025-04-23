@@ -19,7 +19,8 @@ public enum ErrorCode implements Code {
 
   //DEPARTMENT
   DEPARTMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "부서를 찾을 수 없습니다."),
-  DUPLICATE_DEPARTMENT(HttpStatus.CONFLICT, "이미 존재하는 부서입니다.");
+  DUPLICATE_DEPARTMENT(HttpStatus.CONFLICT, "이미 존재하는 부서입니다."),
+  CANNOT_DELETE_DEPARTMENT(HttpStatus.FORBIDDEN, "부서에 소속된 직원이 존재하여 삭제가 불가합니다.");
 
 
   private final HttpStatus status;
