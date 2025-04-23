@@ -17,8 +17,11 @@ public enum ErrorCode implements Code {
 
   //DEPARTMENT
   DEPARTMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "부서를 찾을 수 없습니다."),
-  DUPLICATE_DEPARTMENT(HttpStatus.CONFLICT, "이미 존재하는 부서입니다.");
+  DUPLICATE_DEPARTMENT(HttpStatus.CONFLICT, "이미 존재하는 부서입니다."),
 
+  //EMPLOYEESTATS
+  UNSUPPORTED_UNIT(HttpStatus.BAD_REQUEST, "지원하지 않는 Unit 입니다."),
+  EMPLOYEE_STATS_NOT_FOUND(HttpStatus.NOT_FOUND, "직원 통계를 찾을 수 없습니다.");
 
   private final HttpStatus status;
   private final String message;
