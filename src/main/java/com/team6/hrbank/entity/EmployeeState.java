@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum EmployeeState {
     ACTIVE("재직중"),
-    LEAVE("휴직중"),
+    ON_LEAVE("휴직중"),
     RESIGNED("퇴사");
 
     private final String label;
