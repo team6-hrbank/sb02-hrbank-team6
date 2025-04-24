@@ -1,5 +1,6 @@
 package com.team6.hrbank.entity;
 
+import com.team6.hrbank.dto.employee.EmployeeUpdateRequest;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,7 +32,7 @@ public class Employee {
     private String email;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "department_id",nullable = false)
+    @JoinColumn(name = "department_id", nullable = false)
     private Department department;
 
     @Enumerated(EnumType.STRING)
@@ -49,5 +50,15 @@ public class Employee {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "profile_image_id")
     private FileMetadata profileImage;
+
+    public void update(EmployeeUpdateRequest request, Department department, FileMetadata newProfileImage) {
+        this.employeeName = request.name();
+        this.email = request.email();
+        this.department = department;
+        this.employeePosition = request.position();
+        this.hireDate = request.hireDate();
+        this.employeeState = request.status();
+        this.profileImage = newProfileImage;
+    }
 
 }
