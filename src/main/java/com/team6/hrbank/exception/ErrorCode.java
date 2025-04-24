@@ -29,7 +29,7 @@ public enum ErrorCode implements Code {
 
   //CHANGE LOG
   CHANGE_LOG_NOT_FOUND(HttpStatus.NOT_FOUND, "수정 이력을 찾을 수 없습니다."),
-  CHANGE_LOG_DETAIL_NOT_FOUND(HttpStatus.NOT_FOUND, "수정 이력 상세 내용을 찾을 수 없습니다.");
+  CHANGE_LOG_DETAIL_NOT_FOUND(HttpStatus.NOT_FOUND, "수정 이력 상세 내용을 찾을 수 없습니다."),
 
   //EMPLOYEESTATS
   UNSUPPORTED_UNIT(HttpStatus.BAD_REQUEST, "지원하지 않는 Unit 입니다."),
