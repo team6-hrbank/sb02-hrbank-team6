@@ -1,0 +1,26 @@
+package com.team6.hrbank.controller;
+
+import com.team6.hrbank.dto.changeLog.ChangeLogSearchCondition;
+import com.team6.hrbank.dto.changeLog.CursorPageResponseChangeLogDto;
+import com.team6.hrbank.service.ChangeLogService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RequiredArgsConstructor
+@RestController
+@RequestMapping("/api/change-logs")
+public class ChangeLogController {
+
+  private final ChangeLogService changeLogService;
+
+  @GetMapping
+  public ResponseEntity<CursorPageResponseChangeLogDto> getAllByCondition(
+      ChangeLogSearchCondition condition) {
+    CursorPageResponseChangeLogDto changeLogs = changeLogService.getChangeLogs(condition);
+    return ResponseEntity.ok(changeLogs);
+  }
+
+}
