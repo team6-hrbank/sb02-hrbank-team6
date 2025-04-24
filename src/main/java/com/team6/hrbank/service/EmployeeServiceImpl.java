@@ -89,7 +89,9 @@ public class EmployeeServiceImpl implements EmployeeService {
     //다음 브랜치에서 작업 예정
     @Override
     public void deleteById(Long id) {
-
+        Employee employee = employeeRepository.findById(id)
+                .orElseThrow(() -> new RestException(ErrorCode.EMPLOYEE_NOT_FOUND));
+        employeeRepository.delete(employee);
     }
 
     private String generateEmployeeNumber(int year) {

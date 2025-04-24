@@ -30,8 +30,8 @@ public class EmployeeController {
         EmployeeDto employeeDto = employeeService.findById(id);
         return ResponseEntity.ok(employeeDto);
     }
-
-    @PatchMapping("/{id}")
+  
+  @PatchMapping("/{id}")
     public ResponseEntity<EmployeeDto> updateEmployee(
             @PathVariable Long id,
             @RequestPart("employee") EmployeeUpdateRequest request,
@@ -40,4 +40,10 @@ public class EmployeeController {
         EmployeeDto employeeDto = employeeService.update(id, request, profileImage);
         return ResponseEntity.ok(employeeDto);
     }
-}
+
+  @DeleteMapping("/{id}")
+    public ResponseEntity<EmployeeDto> deleteEmployee(@PathVariable Long id) {
+        employeeService.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
+
