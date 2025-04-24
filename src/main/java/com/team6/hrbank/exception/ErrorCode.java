@@ -22,7 +22,16 @@ public enum ErrorCode implements Code {
   //EMPLOYEESTATS
   UNSUPPORTED_UNIT(HttpStatus.BAD_REQUEST, "지원하지 않는 Unit 입니다."),
   EMPLOYEE_STATS_NOT_FOUND(HttpStatus.NOT_FOUND, "직원 통계를 찾을 수 없습니다."),
-  DUPLICATE_EMPLOYEESTATS(HttpStatus.CONFLICT, "해당 날짜의 직원 통계가 이미 존재합니다.");
+  DUPLICATE_EMPLOYEESTATS(HttpStatus.CONFLICT, "해당 날짜의 직원 통계가 이미 존재합니다."),
+
+  //EMPLOYEESTATE
+  UNSUPPORTED_STATUS(HttpStatus.BAD_REQUEST, "지원하지 않는 Status 입니다."),
+
+  //POSITIONSTATS
+  DUPLICATE_POSTIONSTATS(HttpStatus.CONFLICT, "해당 날짜, 상태, 직무에 대한 직원 통계가 이미 존재합니다."),
+
+  //DEPARTMENTSTATS
+  DUPLICATE_DEPARTMENTSTATS(HttpStatus.CONFLICT, "해당 날짜, 상태, 부서에 대한 직원 통계가 이미 존재합니다.");
 
   private final HttpStatus status;
   private final String message;

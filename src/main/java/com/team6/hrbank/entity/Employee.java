@@ -30,7 +30,7 @@ public class Employee {
     private Department department;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "position", nullable = false)
     private EmployeePosition employeePosition;
 
     @Column(nullable = false)
