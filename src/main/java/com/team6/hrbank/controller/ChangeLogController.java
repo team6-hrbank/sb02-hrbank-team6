@@ -2,10 +2,13 @@ package com.team6.hrbank.controller;
 
 import com.team6.hrbank.dto.changeLog.ChangeLogSearchCondition;
 import com.team6.hrbank.dto.changeLog.CursorPageResponseChangeLogDto;
+import com.team6.hrbank.dto.changeLog.DiffDto;
 import com.team6.hrbank.service.ChangeLogService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,5 +25,12 @@ public class ChangeLogController {
     CursorPageResponseChangeLogDto changeLogs = changeLogService.getChangeLogs(condition);
     return ResponseEntity.ok(changeLogs);
   }
+
+  @GetMapping("/{changeLogId}/diffs")
+  public ResponseEntity<List<DiffDto>> getDetailsByChangeLogId(@PathVariable Long changeLogId) {
+    List<DiffDto> changeLogDetails = changeLogService.getChangeDetail(changeLogId);
+    return ResponseEntity.ok(changeLogDetails);
+  }
+
 
 }
