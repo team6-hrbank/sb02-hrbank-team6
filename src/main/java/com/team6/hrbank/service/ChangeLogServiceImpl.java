@@ -14,6 +14,7 @@ import com.team6.hrbank.repository.ChangeLogDetailRepository;
 import com.team6.hrbank.repository.ChangeLogRepository;
 import com.team6.hrbank.specification.ChangeLogSpecifications;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -24,8 +25,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service
 @RequiredArgsConstructor
+@Service
 public class ChangeLogServiceImpl implements ChangeLogService {
 
   private final ChangeLogRepository changeLogRepository;
@@ -72,6 +73,18 @@ public class ChangeLogServiceImpl implements ChangeLogService {
     }
 
     return changeLogDetailMapper.toDtoList(changeLogDetails);
+  }
+
+  @Transactional(readOnly = true)
+  @Override
+  public Long getCount(Instant fromDate, Instant toDate) {
+    Instant now = Instant.now();
+    Instant oneWeekAgo = now.minus(7, ChronoUnit.DAYS);
+
+    Instant from = (fromDate != null) ? fromDate : oneWeekAgo;
+    Instant to = (toDate != null) ? toDate : now;
+
+    return changeLogRepository.countByCreatedAtBetween(from, to);
   }
 
 }
