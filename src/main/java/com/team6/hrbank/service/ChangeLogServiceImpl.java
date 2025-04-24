@@ -3,14 +3,19 @@ package com.team6.hrbank.service;
 import com.team6.hrbank.dto.changeLog.ChangeLogDto;
 import com.team6.hrbank.dto.changeLog.ChangeLogSearchCondition;
 import com.team6.hrbank.dto.changeLog.CursorPageResponseChangeLogDto;
+import com.team6.hrbank.dto.changeLog.DiffDto;
 import com.team6.hrbank.entity.ChangeLog;
+import com.team6.hrbank.entity.ChangeLogDetail;
+import com.team6.hrbank.exception.ErrorCode;
+import com.team6.hrbank.exception.RestException;
+import com.team6.hrbank.mapper.ChangeLogDetailMapper;
 import com.team6.hrbank.mapper.ChangeLogMapper;
+import com.team6.hrbank.repository.ChangeLogDetailRepository;
 import com.team6.hrbank.repository.ChangeLogRepository;
 import com.team6.hrbank.specification.ChangeLogSpecifications;
 import java.time.Instant;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -19,13 +24,14 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ChangeLogServiceImpl implements ChangeLogService {
 
   private final ChangeLogRepository changeLogRepository;
   private final ChangeLogMapper changeLogMapper;
+  private final ChangeLogDetailRepository changeLogDetailRepository;
+  private final ChangeLogDetailMapper changeLogDetailMapper;
 
   @Transactional(readOnly = true)
   @Override
@@ -51,6 +57,21 @@ public class ChangeLogServiceImpl implements ChangeLogService {
         page.getTotalElements(),
         page.hasNext()
     );
+  }
+
+  @Transactional(readOnly = true)
+  @Override
+  public List<DiffDto> getChangeDetail(Long changeLogId) {
+    if (!changeLogRepository.existsById(changeLogId)) {
+      throw new RestException(ErrorCode.CHANGE_LOG_NOT_FOUND);
+    }
+
+    List<ChangeLogDetail> changeLogDetails = changeLogDetailRepository.findAllByChangeLogId(changeLogId);
+    if (changeLogDetails.isEmpty()) {
+      throw new RestException(ErrorCode.CHANGE_LOG_DETAIL_NOT_FOUND);
+    }
+
+    return changeLogDetailMapper.toDtoList(changeLogDetails);
   }
 
 }
