@@ -3,14 +3,19 @@ package com.team6.hrbank.entity;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "file_metadata")
 @Getter
 @NoArgsConstructor
-public class FileMetadata implements Serializable {
+@AllArgsConstructor
+@Builder
+public class FileMetadata {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
@@ -24,9 +29,10 @@ public class FileMetadata implements Serializable {
   @Column(name = "file_size", nullable = false)
   private int fileSize;
 
-  public FileMetadata(String fileName, String contentType, int fileSize) {
+  public void update(String fileName, String contentType, int fileSize) {
     this.fileName = fileName;
     this.contentType = contentType;
     this.fileSize = fileSize;
   }
+
 }

@@ -31,8 +31,6 @@ public class FileMetadataController {
 
   @GetMapping("/{id}/download")
   public ResponseEntity<Resource> downloadFile(@PathVariable("id") Long id) {
-    Optional<FileMetadata> optionalMetadata = fileMetadataService.findById(id);
-
     // 존재하지 않으면 404
     FileMetadata metadata = fileMetadataService.findById(id)
         .orElseThrow(() -> new RestException(ErrorCode.FILE_NOT_FOUND));
@@ -54,7 +52,7 @@ public class FileMetadataController {
 
   // 파일 생성 테스트용 API
   @PostMapping("/create")
-  public ResponseEntity<FileMetadata>  createFile(@RequestParam("file") MultipartFile multipartFile) {
+  public ResponseEntity<FileMetadata> createFile(@RequestParam("file") MultipartFile multipartFile) {
     FileMetadata saved = fileMetadataService.create(multipartFile);
     return ResponseEntity.ok(saved);
   }
