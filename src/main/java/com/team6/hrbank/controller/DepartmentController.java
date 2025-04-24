@@ -1,9 +1,12 @@
 package com.team6.hrbank.controller;
 
+import com.team6.hrbank.dto.department.CursorPageResponseDepartmentDto;
 import com.team6.hrbank.dto.department.DepartmentCreateRequest;
 import com.team6.hrbank.dto.department.DepartmentDto;
+import com.team6.hrbank.dto.department.DepartmentSearchCondition;
 import com.team6.hrbank.dto.department.DepartmentUpdateRequest;
 import com.team6.hrbank.service.DepartmentService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +26,7 @@ public class DepartmentController {
   private final DepartmentService departmentService;
 
   @PostMapping
-  public ResponseEntity<DepartmentDto> create(@RequestBody DepartmentCreateRequest request) {
+  public ResponseEntity<DepartmentDto> create(@Valid @RequestBody DepartmentCreateRequest request) {
     return ResponseEntity.status(HttpStatus.CREATED).body(departmentService.create(request));
   }
 
@@ -42,4 +45,10 @@ public class DepartmentController {
     departmentService.deleteById(id);
     return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
   }
+
+  @GetMapping
+  public ResponseEntity<CursorPageResponseDepartmentDto> getDepartments(DepartmentSearchCondition condition) {
+    return ResponseEntity.status(HttpStatus.OK).body(departmentService.getDepartments(condition));
+  }
+
 }
