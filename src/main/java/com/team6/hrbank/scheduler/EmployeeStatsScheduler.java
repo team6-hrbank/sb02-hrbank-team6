@@ -13,7 +13,7 @@ public class EmployeeStatsScheduler {
   private final EmployeeStatsService employeeStatsService;
 
   // 오전 12시 5분에 배치를 날려서, 바로 직전 날의 데이터 반영
-  @Scheduled(cron = "0 05 00 * * *")
+  @Scheduled(cron = "0 00 00 * * *")
   @SchedulerLock(name = "batchCreateEmployeeStats", lockAtMostFor = "10m")
   public void batchCreateEmployeeStats() {
     employeeStatsService.createTodayStats();
