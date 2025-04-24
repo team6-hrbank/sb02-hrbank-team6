@@ -91,7 +91,7 @@ CREATE TABLE employee_stats (
                                 joined_employee_count BIGINT NOT NULL,
                                 left_employee_count BIGINT NOT NULL,
                                 created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                                stat_date DATE NOT NULL
+                                stat_date DATE NOT NULL UNIQUE
 );
 
 CREATE TABLE department_stats (
