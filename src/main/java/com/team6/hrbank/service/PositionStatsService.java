@@ -1,13 +1,14 @@
 package com.team6.hrbank.service;
 
+import com.team6.hrbank.dto.employeestats.EmployeeDistributionDto;
 import com.team6.hrbank.entity.EmployeeState;
+import java.time.LocalDate;
+import java.util.List;
 
 public interface PositionStatsService {
-  // 배치 처리
+
   void createTodayStats();
 
-  // 배치 처리 내부에서 쓰이는 상태별 저장 로직
-  void createTodayStatsByState(EmployeeState state);
-
+  List<EmployeeDistributionDto> getDepartmentDistribution(EmployeeState status, LocalDate statDate);
 
 }
