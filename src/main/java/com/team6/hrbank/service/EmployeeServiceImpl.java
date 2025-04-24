@@ -51,12 +51,13 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeMapper.toDto(savedEmployee);
     }
 
-    // 아래 메서드부터는 다음 브랜치에서 구현 예정
     @Override
     public EmployeeDto findById(Long id) {
-        return null;
+        Employee employee = employeeRepository.findById(id).orElseThrow(() -> new RestException(ErrorCode.EMPLOYEE_NOT_FOUND));
+        return employeeMapper.toDto(employee);
     }
 
+    // 아래 메서드부터는 다음 브랜치에서 구현 예정
     @Override
     public List<EmployeeDto> findAll() {
         return List.of();
@@ -74,7 +75,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     private String generateEmployeeNumber(int year) {
         while (true) {
-            String random= String.format("%05d", (int) (Math.random() * 100000)); // 5자리
+            String random = String.format("%05d", (int) (Math.random() * 100000)); // 5자리
             String employeeNumber = String.format("EMP-%d-%s", year, random);
             if (!employeeRepository.existsByEmployeeNumber(employeeNumber)) {
                 return employeeNumber;
