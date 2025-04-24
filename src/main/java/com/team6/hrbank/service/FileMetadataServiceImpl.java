@@ -40,7 +40,11 @@ public class FileMetadataServiceImpl implements FileMetadataService{
       int fileSize = (int) file.getSize();
 
       // 2. DB에 메타데이터 저장
-      FileMetadata metadata = new FileMetadata(originalName, contentType, fileSize);
+      FileMetadata metadata = FileMetadata.builder()
+          .fileName(originalName)
+          .contentType(contentType)
+          .fileSize(fileSize)
+          .build();
       fileMetadataRepository.save(metadata);
 
       // 3. 저장 경로 확인 및 없으면 생성

@@ -4,13 +4,18 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 import java.time.Instant;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "backup_histories")
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class BackupHistory {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,12 +38,10 @@ public class BackupHistory {
   @JoinColumn(name = "backup_file_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "backup_file_fk"), nullable = true)
   private FileMetadata backupFile;
 
-  public BackupHistory(FileMetadata backupFile, String operator,
-      Instant startedAt, Instant endedAt, BackupStatus status) {
-    this.backupFile = backupFile;
-    this.operator = operator;
-    this.startedAt = startedAt;
-    this.endedAt = endedAt;
+  public void update(BackupStatus status, Instant endedAt, FileMetadata newBackupFile) {
     this.status = status;
+    this.endedAt = endedAt;
+    this.backupFile = newBackupFile;
   }
+
 }
