@@ -185,6 +185,7 @@ public class EmployeeStatsServiceImpl implements EmployeeStatsService {
     try {
       // Unique 제약조건으로 인한 예외를 잡기 위해 바로 Flush
       employeeStatsRepository.saveAndFlush(stats);
+      log.info("직원 수 추이 통계 데이터 생성 완료 : {}", stats.getStatDate());
     } catch (DataIntegrityViolationException e) {
       log.error("중복 직원 통계 데이터 생성 시도: {}", stats.getStatDate());
       throw new RestException(ErrorCode.DUPLICATE_EMPLOYEESTATS);

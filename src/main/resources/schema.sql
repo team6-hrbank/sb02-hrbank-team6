@@ -1,9 +1,5 @@
-CREATE TYPE state_enum AS ENUM('재직중', '휴직중', '퇴사');
-CREATE TYPE position_enum AS ENUM('시니어 개발자', '인턴', '프로덕트 매니저', '운영 매니저', 'HR 매니저', '주니어 개발자', '마케터');
 CREATE TYPE change_type AS ENUM ('CREATED', 'UPDATED', 'DELETED');
 CREATE TYPE backup_status AS ENUM ('IN_PROGRESS', 'COMPLETED', 'FAILED', 'SKIPPED');
-create index idx_employee_stats_stat_date
-    on employee_stats(stat_date ASC);
 
 CREATE TABLE file_metadata(
                               id BIGSERIAL PRIMARY KEY,
@@ -26,9 +22,9 @@ CREATE TABLE employees (
                            employee_name VARCHAR(100) NOT NULL,
                            email VARCHAR(100) UNIQUE NOT NULL,
                            department_id INTEGER NOT NULL,
-                           position position_enum NOT NULL,
+                           position VARCHAR(20) NOT NULL,
                            hire_date DATE NOT NULL,
-                           employee_state state_enum NOT NULL DEFAULT '재직중',
+                           employee_state VARCHAR(20) NOT NULL DEFAULT 'ACTIVE',
                            profile_image_id INTEGER,
 
                            CONSTRAINT fk_department
@@ -102,7 +98,7 @@ CREATE TABLE department_stats (
                                   left_employee_count BIGINT NOT NULL,
                                   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
                                   stat_date DATE NOT NULL,
-                                  employee_state state_enum NOT NULL DEFAULT '재직중',
+                                  employee_state VARCHAR(20) NOT NULL DEFAULT 'ACTIVE',
 
                                   CONSTRAINT uq_department_state_date
                                       UNIQUE (stat_date, employee_state, department_name)
@@ -110,13 +106,13 @@ CREATE TABLE department_stats (
 
 CREATE TABLE position_stats (
                                 id BIGSERIAL PRIMARY KEY,
-                                position_name position_enum NOT NULL,
+                                position_name VARCHAR(20) NOT NULL,
                                 employee_count BIGINT NOT NULL,
                                 joined_employee_count BIGINT NOT NULL,
                                 left_employee_count BIGINT NOT NULL,
                                 created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
                                 stat_date DATE NOT NULL,
-                                employee_state state_enum NOT NULL DEFAULT '재직중',
+                                employee_state VARCHAR(20) NOT NULL DEFAULT 'ACTIVE',
 
                                 CONSTRAINT uq_position_state_date
                                     UNIQUE (stat_date, employee_state, position_name)
@@ -128,3 +124,6 @@ CREATE TABLE shedlock (
                           locked_at TIMESTAMP(3) NULL,
                           locked_by VARCHAR(255) NOT NULL
 );
+
+create index idx_employee_stats_stat_date
+    on employee_stats(stat_date ASC);
