@@ -1,6 +1,8 @@
 package com.team6.hrbank.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -8,8 +10,11 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "employees")
+
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Employee {
 
     @Id
@@ -36,6 +41,7 @@ public class Employee {
     @Column(nullable = false)
     private LocalDate hireDate;
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private EmployeeState employeeState = EmployeeState.ACTIVE;
@@ -43,6 +49,5 @@ public class Employee {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "profile_image_id")
     private FileMetadata profileImage;
-
 
 }

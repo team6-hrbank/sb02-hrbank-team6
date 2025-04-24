@@ -10,12 +10,15 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface EmployeeMapper {
+
+    @Mapping(target = "id", ignore = true)
     @Mapping(target = "employeeNumber", expression = "java(employeeNumber)")
     @Mapping(target = "employeeName", source = "request.name")
     @Mapping(target = "email", source = "request.email")
     @Mapping(target = "department", source = "department")
     @Mapping(target = "employeePosition", source = "request.position")
     @Mapping(target = "hireDate", source = "request.hireDate")
+    @Mapping(target = "employeeState", ignore = true)
     @Mapping(target = "profileImage", source = "profileImage")
     Employee toEntity(EmployeeCreateRequest request, String employeeNumber, Department department, FileMetadata profileImage);
 
