@@ -2,6 +2,7 @@ package com.team6.hrbank.controller;
 
 import com.team6.hrbank.dto.employee.EmployeeCreateRequest;
 import com.team6.hrbank.dto.employee.EmployeeDto;
+import com.team6.hrbank.dto.employee.EmployeeUpdateRequest;
 import com.team6.hrbank.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -25,8 +26,24 @@ public class EmployeeController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EmployeeDto> findByEmployeeId(@PathVariable Long id){
+    public ResponseEntity<EmployeeDto> findByEmployeeId(@PathVariable Long id) {
         EmployeeDto employeeDto = employeeService.findById(id);
         return ResponseEntity.ok(employeeDto);
     }
-}
+  
+  @PatchMapping("/{id}")
+    public ResponseEntity<EmployeeDto> updateEmployee(
+            @PathVariable Long id,
+            @RequestPart("employee") EmployeeUpdateRequest request,
+            @RequestPart(value = "profile", required = false) MultipartFile profileImage
+    ){
+        EmployeeDto employeeDto = employeeService.update(id, request, profileImage);
+        return ResponseEntity.ok(employeeDto);
+    }
+
+  @DeleteMapping("/{id}")
+    public ResponseEntity<EmployeeDto> deleteEmployee(@PathVariable Long id) {
+        employeeService.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
+

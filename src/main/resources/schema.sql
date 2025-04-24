@@ -3,6 +3,10 @@ CREATE TYPE position_enum AS ENUM('시니어 개발자', '인턴', '프로덕트
 CREATE TYPE change_type AS ENUM ('CREATED', 'UPDATED', 'DELETED');
 CREATE TYPE backup_status AS ENUM ('IN_PROGRESS', 'COMPLETED', 'FAILED', 'SKIPPED');
 
+create index idx_employee_stats_stat_date
+    on employee_stats(stat_date ASC);
+
+
 CREATE TABLE file_metadata(
                               id BIGSERIAL PRIMARY KEY,
                               file_name VARCHAR(32) NOT NULL,
@@ -89,7 +93,8 @@ CREATE TABLE employee_stats (
                                 joined_employee_count BIGINT NOT NULL,
                                 left_employee_count BIGINT NOT NULL,
                                 created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                                stat_date DATE NOT NULL
+                                stat_date DATE NOT NULL UNIQUE
+
 );
 
 CREATE TABLE department_stats (
@@ -119,3 +124,11 @@ CREATE TABLE position_stats (
                                 CONSTRAINT uq_position_state_date
                                     UNIQUE (stat_date, employee_state, position_name)
 );
+
+CREATE TABLE shedlock (
+                          name VARCHAR(64) PRIMARY KEY,
+                          lock_until TIMESTAMP(3) NULL,
+                          locked_at TIMESTAMP(3) NULL,
+                          locked_by VARCHAR(255) NOT NULL
+);
+

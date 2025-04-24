@@ -17,7 +17,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
-@Table(name = "employee-stats")
+@Table(name = "employee_stats")
 @Getter
 @Builder
 @NoArgsConstructor
