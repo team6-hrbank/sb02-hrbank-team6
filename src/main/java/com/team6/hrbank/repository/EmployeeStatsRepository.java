@@ -9,4 +9,6 @@ public interface EmployeeStatsRepository extends JpaRepository<EmployeeStats, Lo
 
   Optional<EmployeeStats> findByStatDate(LocalDate statDate);
 
+  boolean existsByStatDate(LocalDate statDate);
+
 }
