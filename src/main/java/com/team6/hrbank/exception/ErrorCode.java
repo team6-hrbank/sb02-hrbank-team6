@@ -14,10 +14,19 @@ public enum ErrorCode implements Code {
   //EMPLOYEE
   EMPLOYEE_NOT_FOUND(HttpStatus.NOT_FOUND, "직원을 찾을 수 없습니다."),
   DUPLICATE_EMPLOYEE(HttpStatus.CONFLICT, "이미 존재하는 직원입니다."),
+  EMAIL_ALREADY_EXISTS(HttpStatus.CONFLICT, "이미 사용 중인 이메일입니다."),
+
 
   //DEPARTMENT
   DEPARTMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "부서를 찾을 수 없습니다."),
   DUPLICATE_DEPARTMENT(HttpStatus.CONFLICT, "이미 존재하는 부서입니다."),
+
+  //FILE METADATA
+  FILE_SAVE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "파일 저장에 실패했습니다."),
+  FILE_NOT_FOUND(HttpStatus.NOT_FOUND, "파일이 존재하지 않습니다."),
+
+  CANNOT_DELETE_DEPARTMENT(HttpStatus.FORBIDDEN, "부서에 소속된 직원이 존재하여 삭제가 불가합니다."),
+
 
   //EMPLOYEESTATS
   UNSUPPORTED_UNIT(HttpStatus.BAD_REQUEST, "지원하지 않는 Unit 입니다."),

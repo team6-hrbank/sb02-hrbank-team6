@@ -27,13 +27,13 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     Department department = departmentMapper.toEntity(request);
-    return departmentMapper.toDto(departmentRepository.save(department));
+    return departmentMapper.toDto(departmentRepository.save(department), departmentRepository.countEmployees(department.getId()));
   }
 
   @Override
   public DepartmentDto findById(Long id) {
-    Department department = departmentRepository.findById(id).orElseThrow(() -> new RestException(ErrorCode.NOT_FOUND));
-    return departmentMapper.toDto(department);
+    Department department = departmentRepository.findById(id).orElseThrow(() -> new RestException(ErrorCode.DEPARTMENT_NOT_FOUND));
+    return departmentMapper.toDto(department, departmentRepository.countEmployees(department.getId()));
   }
 
   @Override
@@ -42,12 +42,23 @@ public class DepartmentServiceImpl implements DepartmentService {
   }
 
   @Override
-  public DepartmentDto update(DepartmentUpdateRequest request) {
-    return null;
+  public DepartmentDto update(Long id, DepartmentUpdateRequest request) {
+    Department updateDepartment = departmentRepository.findById(id).orElseThrow(() -> new RestException(ErrorCode.DEPARTMENT_NOT_FOUND));
+    if (!updateDepartment.getDepartmentName().equals(request.name()) && departmentRepository.existsByDepartmentName(request.name())) {
+      throw new RestException(ErrorCode.DUPLICATE_DEPARTMENT);
+    }
+
+    updateDepartment.update(request);
+    return departmentMapper.toDto(departmentRepository.save(updateDepartment), departmentRepository.countEmployees(updateDepartment.getId()));
   }
 
   @Override
   public void deleteById(Long id) {
+    Department department = departmentRepository.findById(id).orElseThrow(() -> new RestException(ErrorCode.DEPARTMENT_NOT_FOUND));
+    if (departmentRepository.countEmployees(department.getId()) > 0) {
+      throw new RestException(ErrorCode.CANNOT_DELETE_DEPARTMENT);
+    }
 
+    departmentRepository.delete(department);
   }
 }
