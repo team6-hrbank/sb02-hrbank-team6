@@ -25,8 +25,15 @@ public class EmployeeController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EmployeeDto> findByEmployeeId(@PathVariable Long id){
+    public ResponseEntity<EmployeeDto> findByEmployeeId(@PathVariable Long id) {
         EmployeeDto employeeDto = employeeService.findById(id);
         return ResponseEntity.ok(employeeDto);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<EmployeeDto> deleteEmployee(@PathVariable Long id) {
+        employeeService.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }
