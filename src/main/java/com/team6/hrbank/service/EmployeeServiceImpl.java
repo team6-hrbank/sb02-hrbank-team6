@@ -6,12 +6,15 @@ import com.team6.hrbank.dto.employee.EmployeeDto;
 import com.team6.hrbank.dto.employee.EmployeeUpdateRequest;
 import com.team6.hrbank.entity.Department;
 import com.team6.hrbank.entity.Employee;
+import com.team6.hrbank.entity.EmployeeState;
 import com.team6.hrbank.entity.FileMetadata;
 import com.team6.hrbank.exception.ErrorCode;
 import com.team6.hrbank.exception.RestException;
 import com.team6.hrbank.mapper.EmployeeMapper;
 import com.team6.hrbank.repository.DepartmentRepository;
+import com.team6.hrbank.repository.EmployeeQueryRepository;
 import com.team6.hrbank.repository.EmployeeRepository;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +29,7 @@ import java.util.List;
 public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
+    private final EmployeeQueryRepository employeeQueryRepository;
     private final DepartmentRepository departmentRepository;
     private final FileMetadataService fileMetadataService;
     private final EmployeeMapper employeeMapper;
@@ -92,6 +96,17 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(() -> new RestException(ErrorCode.EMPLOYEE_NOT_FOUND));
         employeeRepository.delete(employee);
+    }
+
+    @Override
+    public long count(EmployeeState status, LocalDate fromDate, LocalDate toDate) {
+        if(fromDate == null) {
+            return employeeQueryRepository.countByEmployeeState(status);
+        }
+        if(toDate == null) {
+            toDate = LocalDate.now();
+        }
+        return employeeQueryRepository.countByEmployeeStateAndHireDateBetween(status, fromDate, toDate);
     }
 
     private String generateEmployeeNumber(int year) {
