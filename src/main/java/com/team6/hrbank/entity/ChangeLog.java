@@ -50,5 +50,22 @@ public class ChangeLog {
   @OneToMany(mappedBy = "changeLog", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<ChangeLogDetail> details = new ArrayList<>();
 
+  public ChangeLog(Employee employee, ChangeType type, String memo, String ipAddress) {
+    if (type == null) {
+      throw new IllegalArgumentException("변경 유형 값이 존재하지 않습니다.");
+    }
+    if (ipAddress == null || ipAddress.isBlank()) {
+      throw new IllegalArgumentException("IP 주소 값이 존재하지 않습니다.");
+    }
+    this.type = type;
+    this.employee = employee;
+    this.memo = memo;
+    this.ipAddress = ipAddress;
+  }
+
+  public void addDetail(ChangeLogDetail detail) {
+    this.details.add(detail);
+    detail.setChangeLog(this);
+  }
 
 }
