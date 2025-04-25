@@ -1,9 +1,7 @@
 package com.team6.hrbank.service;
 
-import com.team6.hrbank.dto.employee.EmployeeCreateRequest;
-import com.team6.hrbank.dto.employee.EmployeeDto;
+import com.team6.hrbank.dto.employee.*;
 
-import com.team6.hrbank.dto.employee.EmployeeUpdateRequest;
 import com.team6.hrbank.entity.Department;
 import com.team6.hrbank.entity.Employee;
 import com.team6.hrbank.entity.EmployeeState;
@@ -14,7 +12,7 @@ import com.team6.hrbank.mapper.EmployeeMapper;
 import com.team6.hrbank.repository.DepartmentRepository;
 import com.team6.hrbank.repository.EmployeeQueryRepository;
 import com.team6.hrbank.repository.EmployeeRepository;
-import java.time.LocalDateTime;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -64,10 +62,36 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeMapper.toDto(employee);
     }
 
-    // 아래 메서드는 다음 브랜치에서 구현 예정
+    @Transactional(readOnly = true)
     @Override
-    public List<EmployeeDto> findAll() {
-        return List.of();
+    public CursorPageResponseEmployeeDto searchEmployees(EmployeeSearchCondition condition) {
+        List<Employee> employees = employeeRepository.searchEmployeesWithCursor(condition);
+        List<EmployeeDto> content = employees.stream()
+                .map(employeeMapper::toDto)
+                .toList();
+
+        Long nextIdAfter = content.isEmpty() ? null : content.get(content.size() - 1).id();
+        String nextCursor = null;
+        if (!content.isEmpty()) {
+            Employee lastEmployee = employees.get(employees.size() - 1);
+            nextIdAfter = lastEmployee.getId();
+            switch (condition.sortField()) {
+                case "employeeNumber" -> nextCursor = lastEmployee.getEmployeeNumber();
+                case "hireDate" -> nextCursor = lastEmployee.getHireDate().toString();
+                default -> nextCursor = lastEmployee.getEmployeeName();
+            }
+        }
+        long total = (isEmptyCondition(condition)) ? employeeRepository.count() : 0;
+
+        return new CursorPageResponseEmployeeDto(
+                content,
+                nextCursor,
+                nextIdAfter,
+                condition.size() != null ? condition.size() : 10,
+                total,
+                !content.isEmpty() && content.size() >= (condition.size() != null ? condition.size() : 10)
+        );
+
     }
 
     @Override
@@ -99,12 +123,12 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    @Transactional(readOnly=true)
+    @Transactional(readOnly = true)
     public long count(EmployeeState status, LocalDate fromDate, LocalDate toDate) {
-        if(fromDate == null) {
+        if (fromDate == null) {
             return employeeQueryRepository.countByEmployeeState(status);
         }
-        if(toDate == null) {
+        if (toDate == null) {
             toDate = LocalDate.now();
         }
         return employeeQueryRepository.countByEmployeeStateAndHireDateBetween(status, fromDate, toDate);
@@ -118,5 +142,14 @@ public class EmployeeServiceImpl implements EmployeeService {
                 return employeeNumber;
             }
         }
+    }
+    private boolean isEmptyCondition(EmployeeSearchCondition condition) {
+        return condition.nameOrEmail() == null &&
+                condition.departmentName() == null &&
+                condition.position() == null &&
+                condition.employeeNumber() == null &&
+                condition.hireDateFrom() == null &&
+                condition.hireDateTo() == null &&
+                condition.status() == null;
     }
 }
