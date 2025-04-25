@@ -4,6 +4,8 @@ import com.team6.hrbank.entity.FileMetadata;
 import com.team6.hrbank.exception.ErrorCode;
 import com.team6.hrbank.exception.RestException;
 import com.team6.hrbank.service.FileMetadataService;
+import java.time.Duration;
+import java.time.Instant;
 import org.springframework.core.io.Resource;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -55,6 +57,12 @@ public class FileMetadataController {
   public ResponseEntity<FileMetadata> createFile(@RequestParam("file") MultipartFile multipartFile) {
     FileMetadata saved = fileMetadataService.create(multipartFile);
     return ResponseEntity.ok(saved);
+  }
+
+  // 테스트용
+  @GetMapping("/latest")
+  public ResponseEntity<Instant> getLatest() {
+    return ResponseEntity.ok(Instant.now().minus(Duration.ofDays(1)));
   }
 
 
