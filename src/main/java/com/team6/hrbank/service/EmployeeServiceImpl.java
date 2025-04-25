@@ -99,6 +99,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    @Transactional(readOnly=true)
     public long count(EmployeeState status, LocalDate fromDate, LocalDate toDate) {
         if(fromDate == null) {
             return employeeQueryRepository.countByEmployeeState(status);
