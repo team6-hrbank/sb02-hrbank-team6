@@ -1,6 +1,7 @@
 CREATE TYPE change_type AS ENUM ('CREATED', 'UPDATED', 'DELETED');
 CREATE TYPE backup_status AS ENUM ('IN_PROGRESS', 'COMPLETED', 'FAILED', 'SKIPPED');
 
+
 CREATE TABLE file_metadata(
                               id BIGSERIAL PRIMARY KEY,
                               file_name VARCHAR(32) NOT NULL,
@@ -88,6 +89,7 @@ CREATE TABLE employee_stats (
                                 left_employee_count BIGINT NOT NULL,
                                 created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
                                 stat_date DATE NOT NULL UNIQUE
+
 );
 
 CREATE TABLE department_stats (
@@ -127,3 +129,4 @@ CREATE TABLE shedlock (
 
 create index idx_employee_stats_stat_date
     on employee_stats(stat_date ASC);
+
