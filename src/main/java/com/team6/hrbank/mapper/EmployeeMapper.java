@@ -7,6 +7,7 @@ import com.team6.hrbank.entity.Employee;
 import com.team6.hrbank.entity.FileMetadata;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 
 @Mapper(componentModel = "spring")
 public interface EmployeeMapper {
@@ -28,9 +29,14 @@ public interface EmployeeMapper {
     @Mapping(target = "email", source = "email")
     @Mapping(target = "departmentId", source = "department.id")
     @Mapping(target = "departmentName", source = "department.departmentName")
-    @Mapping(target = "position", source = "employeePosition")
+    @Mapping(target = "position", source = "employeePosition",qualifiedByName = "enumToString")
     @Mapping(target = "hireDate", source = "hireDate")
-    @Mapping(target = "status", source = "employeeState")
+    @Mapping(target = "status", source = "employeeState",qualifiedByName = "enumToString")
     @Mapping(target = "profileImageId", source = "profileImage.id")
     EmployeeDto toDto(Employee employee);
+
+    @Named("enumToString")
+    static String enumToString(Enum<?> e) {
+        return e != null ? e.name() : null;
+    }
 }
