@@ -60,6 +60,7 @@ public class EmployeeStatsServiceImpl implements EmployeeStatsService {
         leftCount);
 
     saveEmployeeStats(currentEmployeeStats);
+    log.info("직원 수 추이 통계 생성 성공: {}", currentDate);
   }
 
   @Override

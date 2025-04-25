@@ -13,6 +13,7 @@ import com.team6.hrbank.repository.EmployeeQueryRepository;
 import com.team6.hrbank.repository.EmployeeStatsRepository;
 import com.team6.hrbank.service.DepartmentStatsService;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -35,7 +36,7 @@ public class DepartmentStatsServiceImpl implements DepartmentStatsService {
   @Transactional
   public void createTodayStats() {
     // Department 별로 EmployeeState에 따라 3가지의 통계 테이블이 존재
-    LocalDate current = LocalDate.now();
+    LocalDate current = LocalDate.now(ZoneId.of("Asia/Seoul"));
 
     List<Department> departmentList = departmentRepository.findAll();
 
@@ -43,6 +44,10 @@ public class DepartmentStatsServiceImpl implements DepartmentStatsService {
 
     for (Department department : departmentList) {
       for (EmployeeState state : EmployeeState.values()) {
+        if(departmentStatsRepository.findByStatDateAndEmployeeStateAndDepartmentName(current, state, department.getDepartmentName()).isPresent()) {
+          throw new RestException(ErrorCode.DUPLICATE_DEPARTMENTSTATS);
+        }
+
         Optional<DepartmentStats> departmentStats = departmentStatsRepository.findByStatDateAndEmployeeStateAndDepartmentName(
             current.minusDays(1), state, department.getDepartmentName());
         long currentCount = employeeQueryRepository.countByDepartmentIdAndEmployeeState(
