@@ -46,7 +46,7 @@ public class DashBoardController {
           departmentStatsService.getDepartmentDistribution(status, LocalDate.now()));
     } else if (groupBy.equals("position")) {
       return ResponseEntity.ok(
-          positionStatsService.getDepartmentDistribution(status, LocalDate.now()));
+          positionStatsService.getPositionDistribution(status, LocalDate.now()));
     } else {
       throw new RestException(ErrorCode.UNSUPPORTED_STATUS);
     }

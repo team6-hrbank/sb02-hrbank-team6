@@ -1,16 +1,12 @@
 package com.team6.hrbank.service.Impl;
 
-import com.team6.hrbank.dto.employeestats.EmployeeDistributionDto;
-import com.team6.hrbank.entity.Department;
-import com.team6.hrbank.entity.DepartmentStats;
+import com.team6.hrbank.dto.employeestats.EmployeeDistributionDto;;
 import com.team6.hrbank.entity.EmployeePosition;
 import com.team6.hrbank.entity.EmployeeState;
 import com.team6.hrbank.entity.EmployeeStats;
 import com.team6.hrbank.entity.PositionStats;
 import com.team6.hrbank.exception.ErrorCode;
 import com.team6.hrbank.exception.RestException;
-import com.team6.hrbank.repository.DepartmentRepository;
-import com.team6.hrbank.repository.DepartmentStatsRepository;
 import com.team6.hrbank.repository.EmployeeQueryRepository;
 import com.team6.hrbank.repository.EmployeeStatsRepository;
 import com.team6.hrbank.repository.PositionStatsRepository;
@@ -22,6 +18,8 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,6 +33,10 @@ public class PositionStatsServiceImpl implements PositionStatsService {
 
   @Override
   @Transactional
+  @CacheEvict(
+      value = "positionDistribution",
+      allEntries = true
+  )
   public void createTodayStats() {
     LocalDate current = LocalDate.now(ZoneId.of("Asia/Seoul"));
 
@@ -76,7 +78,11 @@ public class PositionStatsServiceImpl implements PositionStatsService {
 
   @Override
   @Transactional(readOnly = true)
-  public List<EmployeeDistributionDto> getDepartmentDistribution(EmployeeState status, LocalDate statDate) {
+  @Cacheable(
+      value = "positionDistribution",
+      key = "#p0 + #p1.toString()"
+  )
+  public List<EmployeeDistributionDto> getPositionDistribution(EmployeeState status, LocalDate statDate) {
     List<PositionStats> positionStatsList = positionStatsRepository.findAllByStatDateAndEmployeeState(
         statDate, status);
     Optional<EmployeeStats> todayEmployeeStats = employeeStatsRepository.findByStatDate(statDate);
