@@ -61,4 +61,8 @@ public class Employee {
         this.profileImage = newProfileImage;
     }
 
+    public void changeState(EmployeeState state) {
+        this.employeeState = state;
+    }
+
 }
