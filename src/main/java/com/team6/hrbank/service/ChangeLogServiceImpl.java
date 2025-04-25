@@ -64,14 +64,16 @@ public class ChangeLogServiceImpl implements ChangeLogService {
 
     List<ChangeLogDto> contents = changeLogMapper.toDtoList(limitedChangeLogs);
 
-    Long nextIdAfter = contents.isEmpty() ? null : contents.get(contents.size() - 1).id();
+    Long nextIdAfter = null;
     String nextCursor = null;
     if (!contents.isEmpty()) {
       ChangeLogDto lastContent = contents.get(contents.size() - 1);
       if ("at".equals(condition.sortField())) {
         nextCursor = lastContent.at().toString();
+        nextIdAfter = lastContent.id();
       } else if ("ipAddress".equals(condition.sortField())) {
         nextCursor = lastContent.ipAddress();
+        // `ipAddress` 기준일 땐 `idAfter`는 의미 없음
       }
     }
 
