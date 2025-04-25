@@ -43,7 +43,7 @@ public enum ErrorCode implements Code {
   DUPLICATE_POSTIONSTATS(HttpStatus.CONFLICT, "해당 날짜, 상태, 직무에 대한 직원 통계가 이미 존재합니다."),
 
   //DEPARTMENTSTATS
-  DUPLICATE_DEPARTMENTSTATS(HttpStatus.CONFLICT, "해당 날짜, 상태, 부서에 대한 직원 통계가 이미 존재합니다.");
+  DUPLICATE_DEPARTMENTSTATS(HttpStatus.CONFLICT, "해당 날짜, 상태, 부서에 대한 직원 통계가 이미 존재합니다."),
 
   //BACKUP
   LATEST_BACKUP_NOT_FOUND(HttpStatus.NOT_FOUND, "백업 데이터가 없거나 해당 상태의 최근 데이터가 없습니다.");
