@@ -11,7 +11,7 @@ public record ChangeLogSearchCondition(
     Instant atFrom,
     Instant atTo,
     Integer idAfter,
-    Instant cursor,
+    String cursor,
     int size,
     String sortField,
     String sortDirection

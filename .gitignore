@@ -1,10 +1,12 @@
-<<<<<<< HEAD
 HELP.md
 .gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
+
+# QueryDSL QClass
+/src/main/generated/
 
 ### STS ###
 .apt_generated
@@ -61,4 +63,3 @@ out/
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*
->>>>>>> d12926c4eedb771e4c865bf7115c7f18a104dd88
