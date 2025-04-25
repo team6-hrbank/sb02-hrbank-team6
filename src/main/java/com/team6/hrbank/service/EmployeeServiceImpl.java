@@ -12,7 +12,6 @@ import com.team6.hrbank.mapper.EmployeeMapper;
 import com.team6.hrbank.repository.DepartmentRepository;
 import com.team6.hrbank.repository.EmployeeQueryRepository;
 import com.team6.hrbank.repository.EmployeeRepository;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -114,12 +113,11 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeMapper.toDto(employee);
     }
 
-    //다음 브랜치에서 작업 예정
     @Override
     public void deleteById(Long id) {
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(() -> new RestException(ErrorCode.EMPLOYEE_NOT_FOUND));
-        employeeRepository.delete(employee);
+        employee.changeState(EmployeeState.RESIGNED);
     }
 
     @Override
