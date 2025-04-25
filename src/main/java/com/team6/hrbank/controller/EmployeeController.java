@@ -52,7 +52,7 @@ public class EmployeeController {
   }
 
   @GetMapping("/count")
-  public ResponseEntity<Long> countEmployee(@RequestParam EmployeeState status,
+  public ResponseEntity<Long> countEmployee(@RequestParam(required = false, defaultValue = "ACTIVE") EmployeeState status,
       @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate,
       @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toDate) {
     return ResponseEntity.ok(employeeService.count(status,fromDate,toDate));
