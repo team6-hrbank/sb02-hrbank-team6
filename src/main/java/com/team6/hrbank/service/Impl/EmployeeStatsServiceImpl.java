@@ -1,6 +1,7 @@
 package com.team6.hrbank.service.Impl;
 
 import com.team6.hrbank.dto.employeestats.EmployeeTrendDto;
+import com.team6.hrbank.entity.EmployeeState;
 import com.team6.hrbank.entity.EmployeeStats;
 import com.team6.hrbank.exception.ErrorCode;
 import com.team6.hrbank.exception.RestException;
@@ -34,7 +35,7 @@ public class EmployeeStatsServiceImpl implements EmployeeStatsService {
   public void createTodayStats() {
     LocalDate currentDate = LocalDate.now(ZoneId.of("Asia/Seoul"));
     LocalDate prevDate = currentDate.minusDays(1);
-    long currentCount = employeeQueryRepository.count();
+    long currentCount = employeeQueryRepository.countByEmployeeStateNot(EmployeeState.RESIGNED);
     if (employeeStatsRepository.existsByStatDate(currentDate)) {
       log.error("중복 직원 통계 데이터 생성 시도: {}", currentDate);
       throw new RestException(ErrorCode.DUPLICATE_EMPLOYEESTATS);
@@ -93,9 +94,7 @@ public class EmployeeStatsServiceImpl implements EmployeeStatsService {
           default -> throw new RestException(ErrorCode.UNSUPPORTED_UNIT);
         };
 
-    List<EmployeeStats> employeeStatsList = statDateList.stream()
-        .map(this::findEmployeeStatsByStatDate)
-        .toList();
+    List<EmployeeStats> employeeStatsList = employeeStatsRepository.findAllByStatDateIn(statDateList);
 
     // EmployeeStats 데이터를 change, changeRate를 계산하여 dto 형식에 맞춰 반환
     List<EmployeeTrendDto> employeeTrendDtoList = new ArrayList<>();
@@ -181,16 +180,12 @@ public class EmployeeStatsServiceImpl implements EmployeeStatsService {
     return statDateList;
   }
 
-  private EmployeeStats findEmployeeStatsByStatDate(LocalDate statDate) {
-    log.error("직원 통계 조회 실패: {}", statDate);
-    return employeeStatsRepository.findByStatDate(statDate)
-        .orElseThrow(() -> new RestException(ErrorCode.EMPLOYEE_STATS_NOT_FOUND));
-  }
 
   private void saveEmployeeStats(EmployeeStats stats) {
     try {
       // Unique 제약조건으로 인한 예외를 잡기 위해 바로 Flush
       employeeStatsRepository.saveAndFlush(stats);
+      log.info("직원 수 추이 통계 데이터 생성 완료 : {}", stats.getStatDate());
     } catch (DataIntegrityViolationException e) {
       log.error("중복 직원 통계 데이터 생성 시도: {}", stats.getStatDate());
       throw new RestException(ErrorCode.DUPLICATE_EMPLOYEESTATS);
