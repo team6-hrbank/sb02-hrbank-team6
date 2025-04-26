@@ -36,7 +36,7 @@ public class DepartmentController {
   }
 
   @PatchMapping("/{id}")
-  public ResponseEntity<DepartmentDto> update(@PathVariable Long id, @RequestBody DepartmentUpdateRequest request) {
+  public ResponseEntity<DepartmentDto> update(@PathVariable Long id, @Valid @RequestBody DepartmentUpdateRequest request) {
     return ResponseEntity.status(HttpStatus.OK).body(departmentService.update(id, request));
   }
 
