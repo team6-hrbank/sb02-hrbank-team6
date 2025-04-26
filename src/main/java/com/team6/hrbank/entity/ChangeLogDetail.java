@@ -26,7 +26,7 @@ public class ChangeLogDetail {
   @JoinColumn(name = "change_log_id", nullable = false)
   private ChangeLog changeLog;
 
-  @Column(name = "property_name", nullable = false)
+  @Column(name = "property_name", nullable = false, length = 50)
   private String propertyName;
 
   @Column(name = "before_value")
@@ -34,6 +34,19 @@ public class ChangeLogDetail {
 
   @Column(name = "after_value")
   private String afterValue;
+
+  public ChangeLogDetail(String propertyName, String beforeValue, String afterValue) {
+    if (propertyName == null || propertyName.isBlank()) {
+      throw new IllegalArgumentException("변경된 속성명이 존재하지 않습니다.");
+    }
+    this.propertyName = propertyName;
+    this.beforeValue = beforeValue;
+    this.afterValue = afterValue;
+  }
+
+  public void setChangeLog(ChangeLog changeLog) {
+    this.changeLog = changeLog;
+  }
 
 
 }

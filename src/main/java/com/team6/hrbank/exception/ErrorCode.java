@@ -20,16 +20,16 @@ public enum ErrorCode implements Code {
   //DEPARTMENT
   DEPARTMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "부서를 찾을 수 없습니다."),
   DUPLICATE_DEPARTMENT(HttpStatus.CONFLICT, "이미 존재하는 부서입니다."),
+  CANNOT_DELETE_DEPARTMENT(HttpStatus.FORBIDDEN, "부서에 소속된 직원이 존재하여 삭제가 불가합니다."),
 
   //FILE METADATA
   FILE_SAVE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "파일 저장에 실패했습니다."),
   FILE_NOT_FOUND(HttpStatus.NOT_FOUND, "파일이 존재하지 않습니다."),
 
-  CANNOT_DELETE_DEPARTMENT(HttpStatus.FORBIDDEN, "부서에 소속된 직원이 존재하여 삭제가 불가합니다."),
-
   //CHANGE LOG
   CHANGE_LOG_NOT_FOUND(HttpStatus.NOT_FOUND, "수정 이력을 찾을 수 없습니다."),
   CHANGE_LOG_DETAIL_NOT_FOUND(HttpStatus.NOT_FOUND, "수정 이력 상세 내용을 찾을 수 없습니다."),
+  INVALID_DATE_RANGE(HttpStatus.BAD_REQUEST, "조회 시작 날짜는 종료 날짜보다 먼저여야 합니다."),
 
   //EMPLOYEESTATS
   UNSUPPORTED_UNIT(HttpStatus.BAD_REQUEST, "지원하지 않는 Unit 입니다."),

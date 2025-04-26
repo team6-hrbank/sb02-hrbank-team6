@@ -25,41 +25,40 @@ public class ChangeLogRepositoryCustomImpl implements ChangeLogRepositoryCustom 
   public List<ChangeLog> findAllByFilter(ChangeLogSearchCondition condition, int limit) {
     QChangeLog changeLog = QChangeLog.changeLog;
 
-    // 기본 쿼리 시작
     JPAQuery<ChangeLog> query = queryFactory.selectFrom(changeLog)
         .where(buildConditions(condition, changeLog));
 
     // ***** refactor: 커서 + idAfter 복합 쿼리로 묶어서 사용하는 게 더욱 안전
-    // 커서 기반 페이지네이션
     if (condition.cursor() != null) {
-      // 'at' 필드일 때
       if ("at".equals(condition.sortField())) {
         Instant cursorInstant = Instant.parse(condition.cursor());
 
         if ("desc".equalsIgnoreCase(condition.sortDirection())) {
-          query.where(changeLog.createdAt.lt(cursorInstant)); // createdAt 필드와 비교
+          query.where(changeLog.createdAt.lt(cursorInstant));
         } else {
-          query.where(changeLog.createdAt.gt(cursorInstant)); // createdAt 필드와 비교
+          query.where(changeLog.createdAt.gt(cursorInstant));
         }
       }
-      // 'ipAddress' 필드일 때
       else if ("ipAddress".equals(condition.sortField())) {
-        String cursor = condition.cursor(); // cursor 값은 String 타입
+        String cursor = condition.cursor();
 
         if ("desc".equalsIgnoreCase(condition.sortDirection())) {
-          query.where(changeLog.ipAddress.lt(cursor)); // ipAddress 필드와 비교
+          query.where(changeLog.ipAddress.lt(cursor));
         } else {
-          query.where(changeLog.ipAddress.gt(cursor)); // ipAddress 필드와 비교
+          query.where(changeLog.ipAddress.gt(cursor));
         }
       }
     }
 
-    // idAfter 기반 페이지네이션
-    if (condition.idAfter() != null && condition.idAfter() > 0) {
-      query.where(changeLog.id.lt(condition.idAfter()));
+    // ***** refactor: idAfter가 ipAddress 기준으로 정렬 됐을 때 의미가 없는 것 아닌지?
+    if ("at".equals(condition.sortField()) && condition.idAfter() != null && condition.idAfter() > 0) {
+      if ("desc".equalsIgnoreCase(condition.sortDirection())) {
+        query.where(changeLog.id.lt(condition.idAfter()));
+      } else {
+        query.where(changeLog.id.gt(condition.idAfter()));
+      }
     }
 
-    // 정렬 처리
     if ("at".equals(condition.sortField())) {
       if ("desc".equalsIgnoreCase(condition.sortDirection())) {
         query.orderBy(changeLog.createdAt.desc());

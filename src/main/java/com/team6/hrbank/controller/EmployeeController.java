@@ -4,6 +4,7 @@ import com.team6.hrbank.dto.employee.*;
 import com.team6.hrbank.entity.EmployeeState;
 import com.team6.hrbank.service.EmployeeService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 
 import lombok.RequiredArgsConstructor;
@@ -22,9 +23,10 @@ public class EmployeeController {
     @PostMapping
     public ResponseEntity<EmployeeDto> createEmployee(
             @RequestPart("employee") EmployeeCreateRequest request,
-            @RequestPart(value = "profile", required = false) MultipartFile profileImage
+            @RequestPart(value = "profile", required = false) MultipartFile profileImage,
+        HttpServletRequest httpRequest
     ) {
-        EmployeeDto employeeDto = employeeService.create(request, profileImage);
+        EmployeeDto employeeDto = employeeService.create(request, profileImage, httpRequest.getRemoteAddr());
         return ResponseEntity.ok(employeeDto);
     }
 
@@ -43,15 +45,18 @@ public class EmployeeController {
     public ResponseEntity<EmployeeDto> updateEmployee(
             @PathVariable Long id,
             @RequestPart("employee") EmployeeUpdateRequest request,
-            @RequestPart(value = "profile", required = false) MultipartFile profileImage
+            @RequestPart(value = "profile", required = false) MultipartFile profileImage,
+        HttpServletRequest httpRequest
     ) {
-        EmployeeDto employeeDto = employeeService.update(id, request, profileImage);
+        EmployeeDto employeeDto = employeeService.update(id, request, profileImage, httpRequest.getRemoteAddr());
         return ResponseEntity.ok(employeeDto);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<EmployeeDto> deleteEmployee(@PathVariable Long id) {
-        employeeService.deleteById(id);
+    public ResponseEntity<EmployeeDto> deleteEmployee(
+        @PathVariable Long id,
+        HttpServletRequest httpRequest) {
+        employeeService.deleteById(id, httpRequest.getRemoteAddr());
         return ResponseEntity.noContent().build();
     }
 
