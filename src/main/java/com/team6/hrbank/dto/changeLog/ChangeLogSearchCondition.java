@@ -10,7 +10,7 @@ public record ChangeLogSearchCondition(
     String ipAddress,
     Instant atFrom,
     Instant atTo,
-    Integer idAfter,
+    Long idAfter,
     String cursor,
     int size,
     String sortField,

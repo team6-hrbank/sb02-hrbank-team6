@@ -31,7 +31,7 @@ public class ChangeLogRepositoryCustomImpl implements ChangeLogRepositoryCustom 
     if (condition.cursor() != null) {
       String sortField = condition.sortField();
       String sortDirection = condition.sortDirection();
-      Integer idAfter = condition.idAfter();
+      Long idAfter = condition.idAfter();
 
       BooleanBuilder cursorCondition = new BooleanBuilder();
 
