@@ -82,7 +82,7 @@ public class ChangeLogServiceImpl implements ChangeLogService {
         nextCursor,
         nextIdAfter,
         condition.size(),
-        contents.size(),
+        (long) contents.size(),
         hasNext
     );
   }
