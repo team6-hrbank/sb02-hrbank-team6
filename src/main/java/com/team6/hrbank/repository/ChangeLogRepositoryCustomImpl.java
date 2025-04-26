@@ -25,51 +25,71 @@ public class ChangeLogRepositoryCustomImpl implements ChangeLogRepositoryCustom 
   public List<ChangeLog> findAllByFilter(ChangeLogSearchCondition condition, int limit) {
     QChangeLog changeLog = QChangeLog.changeLog;
 
-    JPAQuery<ChangeLog> query = queryFactory.selectFrom(changeLog)
-        .where(buildConditions(condition, changeLog));
+    BooleanBuilder whereCondition = buildConditions(condition, changeLog);
 
-    // ***** refactor: 커서 + idAfter 복합 쿼리로 묶어서 사용하는 게 더욱 안전
+    // 커서 조건 (페이지네이션)
     if (condition.cursor() != null) {
-      if ("at".equals(condition.sortField())) {
-        Instant cursorInstant = Instant.parse(condition.cursor());
+      String sortField = condition.sortField();
+      String sortDirection = condition.sortDirection();
+      Integer idAfter = condition.idAfter();
 
-        if ("desc".equalsIgnoreCase(condition.sortDirection())) {
-          query.where(changeLog.createdAt.lt(cursorInstant));
+      BooleanBuilder cursorCondition = new BooleanBuilder();
+
+      if ("at".equals(sortField)) {
+        Instant cursorAt = Instant.parse(condition.cursor());
+
+        if ("desc".equalsIgnoreCase(sortDirection)) {
+          cursorCondition.and(
+              changeLog.createdAt.lt(cursorAt)
+                  .or(changeLog.createdAt.eq(cursorAt)
+                      .and(changeLog.id.lt(idAfter)))
+          );
         } else {
-          query.where(changeLog.createdAt.gt(cursorInstant));
+          cursorCondition.and(
+              changeLog.createdAt.gt(cursorAt)
+                  .or(changeLog.createdAt.eq(cursorAt)
+                      .and(changeLog.id.gt(idAfter)))
+          );
+        }
+      } else if ("ipAddress".equals(sortField)) {
+        String cursorIp = condition.cursor();
+
+        if ("desc".equalsIgnoreCase(sortDirection)) {
+          cursorCondition.and(
+              changeLog.ipAddress.lt(cursorIp)
+                  .or(changeLog.ipAddress.eq(cursorIp)
+                      .and(changeLog.id.lt(idAfter)))
+          );
+        } else {
+          cursorCondition.and(
+              changeLog.ipAddress.gt(cursorIp)
+                  .or(changeLog.ipAddress.eq(cursorIp)
+                      .and(changeLog.id.gt(idAfter)))
+          );
         }
       }
-      else if ("ipAddress".equals(condition.sortField())) {
-        String cursor = condition.cursor();
 
-        if ("desc".equalsIgnoreCase(condition.sortDirection())) {
-          query.where(changeLog.ipAddress.lt(cursor));
-        } else {
-          query.where(changeLog.ipAddress.gt(cursor));
-        }
-      }
+      // 필터 조건 + 커서 조건 조합
+      whereCondition.and(cursorCondition);
     }
 
-    // ***** refactor: idAfter가 ipAddress 기준으로 정렬 됐을 때 의미가 없는 것 아닌지?
-    if ("at".equals(condition.sortField()) && condition.idAfter() != null && condition.idAfter() > 0) {
-      if ("desc".equalsIgnoreCase(condition.sortDirection())) {
-        query.where(changeLog.id.lt(condition.idAfter()));
-      } else {
-        query.where(changeLog.id.gt(condition.idAfter()));
-      }
-    }
+    // 쿼리 생성
+    JPAQuery<ChangeLog> query = queryFactory
+        .selectFrom(changeLog)
+        .where(whereCondition);
 
+    // 정렬 조건 (id까지 포함한 복합 정렬)
     if ("at".equals(condition.sortField())) {
       if ("desc".equalsIgnoreCase(condition.sortDirection())) {
-        query.orderBy(changeLog.createdAt.desc());
+        query.orderBy(changeLog.createdAt.desc(), changeLog.id.desc());
       } else {
-        query.orderBy(changeLog.createdAt.asc());
+        query.orderBy(changeLog.createdAt.asc(), changeLog.id.asc());
       }
     } else if ("ipAddress".equals(condition.sortField())) {
       if ("desc".equalsIgnoreCase(condition.sortDirection())) {
-        query.orderBy(changeLog.ipAddress.desc());
+        query.orderBy(changeLog.ipAddress.desc(), changeLog.id.desc());
       } else {
-        query.orderBy(changeLog.ipAddress.asc());
+        query.orderBy(changeLog.ipAddress.asc(), changeLog.id.asc());
       }
     }
 
