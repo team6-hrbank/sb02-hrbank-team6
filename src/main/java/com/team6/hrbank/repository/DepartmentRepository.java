@@ -8,8 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface DepartmentRepository extends JpaRepository<Department, Long>,
-    JpaSpecificationExecutor<Department>{
+public interface DepartmentRepository extends JpaRepository<Department, Long>, DepartmentRepositoryCustom{
   boolean existsByDepartmentName(String departmentName);
 
   @Query("SELECT COUNT(e) FROM Employee e WHERE e.department.id = :departmentId")
