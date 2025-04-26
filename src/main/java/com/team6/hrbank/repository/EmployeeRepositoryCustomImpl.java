@@ -25,51 +25,94 @@ public class EmployeeRepositoryCustomImpl implements EmployeeRepositoryCustom {
         QEmployee employee = QEmployee.employee;
         QDepartment department = QDepartment.department;
 
-        JPAQuery<Employee> query = queryFactory
-                .selectFrom(employee)
-                .leftJoin(employee.department, department).fetchJoin()
-                .where(buildConditions(condition, employee, department));
+        BooleanBuilder whereCondition = buildConditions(condition, employee, department);
 
         if (condition.cursor() != null) {
+            BooleanBuilder cursorCondition = new BooleanBuilder();
             switch (condition.sortField()) {
                 case "employeeNumber" -> {
-                    if ("desc".equalsIgnoreCase(condition.sortDirection()))
-                        query.where(employee.employeeNumber.lt(condition.cursor()));
-                    else
-                        query.where(employee.employeeNumber.gt(condition.cursor()));
+                    if ("desc".equalsIgnoreCase(condition.sortDirection())) {
+                        cursorCondition.and(
+                                employee.employeeNumber.lt(condition.cursor())
+                                        .or(employee.employeeNumber.eq(condition.cursor())
+                                                .and(employee.id.lt(condition.idAfter())))
+                        );
+                    } else {
+                        cursorCondition.and(
+                                employee.employeeNumber.gt(condition.cursor())
+                                        .or(employee.employeeNumber.eq(condition.cursor()))
+                                        .and(employee.id.gt(condition.idAfter()))
+                        );
+                    }
                 }
                 case "hireDate" -> {
                     LocalDate cursorDate = LocalDate.parse(condition.cursor());
-                    if ("desc".equalsIgnoreCase(condition.sortDirection()))
-                        query.where(employee.hireDate.lt(cursorDate));
-                    else
-                        query.where(employee.hireDate.gt(cursorDate));
+                    if ("desc".equalsIgnoreCase(condition.sortDirection())) {
+                        cursorCondition.and(
+                                employee.hireDate.lt(cursorDate)
+                                        .or(employee.hireDate.eq(cursorDate)
+                                                .and(employee.id.lt(condition.idAfter())))
+                        );
+                    } else {
+                        cursorCondition.and(
+                                employee.hireDate.gt(cursorDate)
+                                        .or(employee.hireDate.eq(cursorDate)
+                                                .and(employee.id.gt(condition.idAfter())))
+                        );
+                    }
                 }
-                default -> {
-                    if ("desc".equalsIgnoreCase(condition.sortDirection()))
-                        query.where(employee.employeeName.lt(condition.cursor()));
-                    else
-                        query.where(employee.employeeName.gt(condition.cursor()));
+                case "employeeName" -> {
+                    if ("desc".equalsIgnoreCase(condition.sortDirection())) {
+                        cursorCondition.and(
+                                employee.employeeName.lt(condition.cursor())
+                                        .or(employee.employeeName.eq(condition.cursor())
+                                                .and(employee.id.lt(condition.idAfter())))
+                        );
+                    } else {
+                        cursorCondition.and(
+                                employee.employeeName.gt(condition.cursor())
+                                        .or(employee.employeeName.eq(condition.cursor())
+                                                .and(employee.id.gt(condition.idAfter())))
+                        );
+                    }
                 }
             }
+            whereCondition.and(cursorCondition);
         }
-        if (condition.idAfter() != null) {
-            query.where(employee.id.gt(condition.idAfter()));
-        }
+        JPAQuery<Employee> query = queryFactory
+                .selectFrom(employee)
+                .leftJoin(employee.department, department).fetchJoin()
+                .where(whereCondition);
 
         switch (condition.sortField()) {
-            case "employeeNumber" ->
-                    query.orderBy("desc".equalsIgnoreCase(condition.sortDirection()) ? employee.employeeNumber.desc() : employee.employeeNumber.asc());
-            case "hireDate" ->
-                    query.orderBy("desc".equalsIgnoreCase(condition.sortDirection()) ? employee.hireDate.desc() : employee.hireDate.asc());
-            default ->
-                    query.orderBy("desc".equalsIgnoreCase(condition.sortDirection()) ? employee.employeeName.desc() : employee.employeeName.asc());
+            case "employeeNumber" -> {
+                if ("desc".equalsIgnoreCase(condition.sortDirection())) {
+                    query.orderBy(employee.employeeNumber.desc(), employee.id.desc());
+                } else {
+                    query.orderBy(employee.employeeNumber.asc(), employee.id.asc());
+                }
+            }
+            case "hireDate" -> {
+                if ("desc".equalsIgnoreCase(condition.sortDirection())) {
+                    query.orderBy(employee.hireDate.desc(), employee.id.desc());
+                } else {
+                    query.orderBy(employee.hireDate.asc(), employee.id.asc());
+                }
+            }
+            case "employeeName" -> {
+                if ("desc".equalsIgnoreCase(condition.sortDirection())) {
+                    query.orderBy(employee.employeeName.desc(), employee.id.desc());
+                } else {
+                    query.orderBy(employee.employeeName.asc(), employee.id.asc());
+                }
+            }
         }
 
         return query.limit(condition.size() != null ? condition.size() : 10).fetch();
     }
 
-    private BooleanBuilder buildConditions(EmployeeSearchCondition condition, QEmployee employee, QDepartment department) {
+    private BooleanBuilder buildConditions(EmployeeSearchCondition condition, QEmployee employee, QDepartment
+            department) {
         BooleanBuilder builder = new BooleanBuilder();
 
         if (StringUtils.hasText(condition.nameOrEmail())) {

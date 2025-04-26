@@ -15,8 +15,10 @@ import com.team6.hrbank.mapper.EmployeeMapper;
 import com.team6.hrbank.repository.DepartmentRepository;
 import com.team6.hrbank.repository.EmployeeQueryRepository;
 import com.team6.hrbank.repository.EmployeeRepository;
+
 import java.time.LocalDate;
 import java.util.List;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -88,13 +90,15 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
         long total = (isEmptyCondition(condition)) ? employeeRepository.count() : 0;
 
+        int pageSize = condition.size() != null ? condition.size() : 10;
+
         return new CursorPageResponseEmployeeDto(
                 content,
                 nextCursor,
                 nextIdAfter,
-                condition.size() != null ? condition.size() : 10,
+                pageSize,
                 total,
-                !content.isEmpty() && content.size() >= (condition.size() != null ? condition.size() : 10)
+                !content.isEmpty() && content.size() > pageSize
         );
 
     }
@@ -155,6 +159,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             }
         }
     }
+
     private boolean isEmptyCondition(EmployeeSearchCondition condition) {
         return condition.nameOrEmail() == null &&
                 condition.departmentName() == null &&
@@ -164,18 +169,19 @@ public class EmployeeServiceImpl implements EmployeeService {
                 condition.hireDateTo() == null &&
                 condition.status() == null;
     }
+
     private Employee cloneEmployee(Employee original) {
         return Employee.builder()
-            .id(original.getId())
-            .email(original.getEmail())
-            .employeeName(original.getEmployeeName())
-            .employeeNumber(original.getEmployeeNumber())
-            .employeePosition(original.getEmployeePosition())
-            .employeeState(original.getEmployeeState())
-            .department(original.getDepartment())
-            .hireDate(original.getHireDate())
-            .profileImage(original.getProfileImage())
-            .build();
+                .id(original.getId())
+                .email(original.getEmail())
+                .employeeName(original.getEmployeeName())
+                .employeeNumber(original.getEmployeeNumber())
+                .employeePosition(original.getEmployeePosition())
+                .employeeState(original.getEmployeeState())
+                .department(original.getDepartment())
+                .hireDate(original.getHireDate())
+                .profileImage(original.getProfileImage())
+                .build();
     }
 
 }
