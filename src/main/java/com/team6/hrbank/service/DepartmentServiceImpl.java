@@ -10,14 +10,8 @@ import com.team6.hrbank.exception.ErrorCode;
 import com.team6.hrbank.exception.RestException;
 import com.team6.hrbank.mapper.DepartmentMapper;
 import com.team6.hrbank.repository.DepartmentRepository;
-import com.team6.hrbank.specification.DepartmentSpecification;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,30 +42,20 @@ public class DepartmentServiceImpl implements DepartmentService {
   @Override
   @Transactional(readOnly = true)
   public CursorPageResponseDepartmentDto getDepartments(DepartmentSearchCondition condition) {
-    Sort sort = Sort.by(
-        Sort.Direction.fromString(condition.sortDirection()),
-        condition.sortField().equals("name") ? "departmentName" : "departmentEstablishedDate"
-    ).and(Sort.by("id"));
-
-    Pageable pageable = PageRequest.of(0, condition.size(), sort);
-
-    Specification<Department> spec = DepartmentSpecification.withConditions(condition);
-
-    Page<Department> page = departmentRepository.findAll(spec, pageable);
-    List<Department> departments = page.getContent();
-
+    List<Department> departments = departmentRepository.searchDepartmentsWithCursor(condition);
     List<DepartmentDto> content = departments.stream()
         .map(d -> departmentMapper.toDto(d, departmentRepository.countEmployeesByDepartmentId(d.getId())))
         .toList();
 
-    DepartmentDto last = content.isEmpty() ? null : content.get(content.size() - 1);
-
+    Long nextIdAfter = content.isEmpty() ? null : content.get(content.size() - 1).id();
     String nextCursor = null;
-    Long nextIdAfter = null;
 
-    if (last != null) {
-      nextCursor = condition.sortField().equals("name") ? last.name() : last.establishedDate().toString();
-      nextIdAfter = last.id();
+    if (!content.isEmpty()) {
+      Department lastDepartment = departments.get(departments.size() - 1);
+      nextIdAfter = lastDepartment.getId();
+      if ("name".equals(condition.sortField())) nextCursor = lastDepartment.getDepartmentName();
+      else if ("establishedDate".equals(condition.sortField())) nextCursor = String.valueOf(
+          lastDepartment.getDepartmentEstablishedDate());
     }
 
     return new CursorPageResponseDepartmentDto(
@@ -79,8 +63,8 @@ public class DepartmentServiceImpl implements DepartmentService {
         nextCursor,
         nextIdAfter,
         condition.size(),
-        page.getTotalElements(),
-        page.hasNext()
+        departmentRepository.count(),
+        departments.size() > condition.size()
     );
   }
 
