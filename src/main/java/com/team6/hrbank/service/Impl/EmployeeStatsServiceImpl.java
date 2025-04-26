@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +34,7 @@ public class EmployeeStatsServiceImpl implements EmployeeStatsService {
 
   @Override
   @Transactional
+  @CacheEvict(value = "employeeTrend", allEntries = true) // 배치 생성이 되면, 캐시 업데이트를 해야하므로 관련된 모든 캐시 삭제 -> 첫 조회시 캐시 생성
   public void createTodayStats() {
     LocalDate currentDate = LocalDate.now(ZoneId.of("Asia/Seoul"));
     LocalDate prevDate = currentDate.minusDays(1);
@@ -65,6 +68,11 @@ public class EmployeeStatsServiceImpl implements EmployeeStatsService {
 
   @Override
   @Transactional(readOnly = true)
+  @Cacheable(
+      value = "employeeTrend",
+      key = "#p2", // unit 별로 캐시 생성 (월별 / 주별 / 일별 / 분기별 / 연도별)
+      condition = "#p0 == null and #p1 == null" // null(기본값)인 경우에만 캐싱
+  )
   public List<EmployeeTrendDto> getEmployeeTrend(LocalDate from, LocalDate to, String unit) {
     // null일 경우 기본값 지정
     if (to == null) {

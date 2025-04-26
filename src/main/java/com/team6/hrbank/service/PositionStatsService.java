@@ -9,6 +9,6 @@ public interface PositionStatsService {
 
   void createTodayStats();
 
-  List<EmployeeDistributionDto> getDepartmentDistribution(EmployeeState status, LocalDate statDate);
+  List<EmployeeDistributionDto> getPositionDistribution(EmployeeState status, LocalDate statDate);
 
 }

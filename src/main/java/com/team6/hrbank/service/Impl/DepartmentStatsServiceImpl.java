@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +36,10 @@ public class DepartmentStatsServiceImpl implements DepartmentStatsService {
 
   @Override
   @Transactional
+  @CacheEvict(
+      value = "departmentDistribution",
+      allEntries = true
+  )
   public void createTodayStats() {
     // Department 별로 EmployeeState에 따라 3가지의 통계 테이블이 존재
     LocalDate current = LocalDate.now(ZoneId.of("Asia/Seoul"));
@@ -78,6 +84,10 @@ public class DepartmentStatsServiceImpl implements DepartmentStatsService {
 
   @Override
   @Transactional(readOnly = true)
+  @Cacheable(
+      value = "departmentDistribution",
+      key = "#p0 + #p1.toString()"
+  )
   public List<EmployeeDistributionDto> getDepartmentDistribution(EmployeeState status, LocalDate statDate) {
     List<DepartmentStats> departmentStatsList = departmentStatsRepository.findAllByStatDateAndEmployeeState(
         statDate, status);
