@@ -74,6 +74,18 @@ public class DepartmentRepositoryCustomImpl implements DepartmentRepositoryCusto
     return query.limit(condition.size() + 1).fetch();
   }
 
+  @Override
+  public Long countBySearchCondition(DepartmentSearchCondition condition) {
+    QDepartment department = QDepartment.department;
+    BooleanBuilder builder = buildConditions(condition, department);
+
+    return queryFactory
+        .select(department.count())
+        .from(department)
+        .where(builder)
+        .fetchOne();
+  }
+
   public BooleanBuilder buildConditions(DepartmentSearchCondition condition,
       QDepartment department) {
     BooleanBuilder builder = new BooleanBuilder();

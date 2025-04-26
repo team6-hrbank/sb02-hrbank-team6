@@ -49,6 +49,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     Long nextIdAfter = content.isEmpty() ? null : content.get(content.size() - 1).id();
     String nextCursor = null;
+    Long totalElements = departmentRepository.countBySearchCondition(condition);
 
     if (!content.isEmpty()) {
       Department lastDepartment = departments.get(departments.size() - 1);
@@ -63,7 +64,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         nextCursor,
         nextIdAfter,
         condition.size(),
-        departmentRepository.count(),
+        totalElements,
         departments.size() > condition.size()
     );
   }

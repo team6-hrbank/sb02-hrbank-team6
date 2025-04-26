@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface DepartmentRepositoryCustom {
   List<Department> searchDepartmentsWithCursor(DepartmentSearchCondition condition);
+  Long countBySearchCondition(DepartmentSearchCondition condition);
 }
