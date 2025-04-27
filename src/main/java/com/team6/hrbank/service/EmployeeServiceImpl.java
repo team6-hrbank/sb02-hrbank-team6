@@ -14,7 +14,6 @@ import com.team6.hrbank.repository.EmployeeQueryRepository;
 import com.team6.hrbank.repository.EmployeeRepository;
 
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.List;
 
 import lombok.RequiredArgsConstructor;
@@ -163,10 +162,16 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     private EmployeePosition validateAndParsePosition(String label) {
-        return Arrays.stream(EmployeePosition.values())
-                .filter(p -> p.getLabel().equals(label))
-                .findFirst()
-                .orElseThrow(() -> new RestException(ErrorCode.INVALID_POSITION));
+        for (EmployeePosition position : EmployeePosition.values()) {
+            if (position.getLabel().equals(label)) {
+                return position;
+            }
+        }
+        try {
+            return EmployeePosition.valueOf(label);
+        } catch (IllegalArgumentException e) {
+            throw new RestException(ErrorCode.INVALID_POSITION);
+        }
     }
 
     private boolean isEmptyCondition(EmployeeSearchCondition condition) {
