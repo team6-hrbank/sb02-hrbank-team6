@@ -1,4 +1,4 @@
-package com.team6.hrbank.service.Impl;
+package com.team6.hrbank.service;
 
 import com.team6.hrbank.dto.employeestats.EmployeeDistributionDto;;
 import com.team6.hrbank.entity.EmployeePosition;
@@ -10,7 +10,6 @@ import com.team6.hrbank.exception.RestException;
 import com.team6.hrbank.repository.EmployeeQueryRepository;
 import com.team6.hrbank.repository.EmployeeStatsRepository;
 import com.team6.hrbank.repository.PositionStatsRepository;
-import com.team6.hrbank.service.PositionStatsService;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -47,6 +46,7 @@ public class PositionStatsServiceImpl implements PositionStatsService {
     for (EmployeePosition position : positionList) {
       for (EmployeeState state : EmployeeState.values()) {
         if(positionStatsRepository.findByStatDateAndEmployeeStateAndPositionName(current, state, position).isPresent()) {
+          log.warn("직무별 분포 데이터 중복 발생으로 생성 실패: {}",current);
           throw new RestException(ErrorCode.DUPLICATE_POSTIONSTATS);
         }
 
