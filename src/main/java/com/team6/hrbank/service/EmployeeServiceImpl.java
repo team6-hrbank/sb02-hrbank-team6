@@ -5,10 +5,7 @@ import com.team6.hrbank.dto.employee.EmployeeCreateRequest;
 import com.team6.hrbank.dto.employee.EmployeeDto;
 import com.team6.hrbank.dto.employee.EmployeeSearchCondition;
 import com.team6.hrbank.dto.employee.EmployeeUpdateRequest;
-import com.team6.hrbank.entity.Department;
-import com.team6.hrbank.entity.Employee;
-import com.team6.hrbank.entity.EmployeeState;
-import com.team6.hrbank.entity.FileMetadata;
+import com.team6.hrbank.entity.*;
 import com.team6.hrbank.exception.ErrorCode;
 import com.team6.hrbank.exception.RestException;
 import com.team6.hrbank.mapper.EmployeeMapper;
@@ -17,6 +14,7 @@ import com.team6.hrbank.repository.EmployeeQueryRepository;
 import com.team6.hrbank.repository.EmployeeRepository;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 
 import lombok.RequiredArgsConstructor;
@@ -49,12 +47,14 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         Department department = departmentRepository.findById(request.departmentId()).orElseThrow(() -> new RestException(ErrorCode.DEPARTMENT_NOT_FOUND));
 
+        EmployeePosition position = validateAndParsePosition(request.position());
+
         FileMetadata newProfileImage = null;
         if (profileImage != null && !profileImage.isEmpty()) {
             newProfileImage = fileMetadataService.create(profileImage);
         }
 
-        Employee newEmployee = employeeMapper.toEntity(request, employeeNumber, department, newProfileImage);
+        Employee newEmployee = employeeMapper.toEntity(request, employeeNumber, department, position, newProfileImage);
         Employee savedEmployee = employeeRepository.save(newEmployee);
 
         changeLogService.create(null, savedEmployee, request.memo(), ipAddress);
@@ -117,11 +117,13 @@ public class EmployeeServiceImpl implements EmployeeService {
         Department newDepartment = departmentRepository.findById(request.departmentId())
                 .orElseThrow(() -> new RestException(ErrorCode.DEPARTMENT_NOT_FOUND));
 
+        EmployeePosition position = validateAndParsePosition(request.position());
+
         FileMetadata newProfileImage = null;
         if (profileImage != null && !profileImage.isEmpty()) {
             newProfileImage = fileMetadataService.create(profileImage);
         }
-        employee.update(request, newDepartment, newProfileImage);
+        employee.update(request, newDepartment, position, newProfileImage);
 
         changeLogService.create(beforeUpdate, employee, request.memo(), ipAddress);
 
@@ -158,6 +160,13 @@ public class EmployeeServiceImpl implements EmployeeService {
                 return employeeNumber;
             }
         }
+    }
+
+    private EmployeePosition validateAndParsePosition(String label) {
+        return Arrays.stream(EmployeePosition.values())
+                .filter(p -> p.getLabel().equals(label))
+                .findFirst()
+                .orElseThrow(() -> new RestException(ErrorCode.INVALID_POSITION));
     }
 
     private boolean isEmptyCondition(EmployeeSearchCondition condition) {
