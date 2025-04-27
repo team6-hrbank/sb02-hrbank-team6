@@ -98,7 +98,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 nextIdAfter,
                 pageSize,
                 total,
-                !content.isEmpty() && content.size() > pageSize
+                !content.isEmpty() && content.size() == pageSize
         );
 
     }
