@@ -134,6 +134,11 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(() -> new RestException(ErrorCode.EMPLOYEE_NOT_FOUND));
 
+        //파일 삭제 서비스 구현시 주석 해제하겠습니다.
+        /*if (employee.getProfileImage() != null) {
+            fileMetadataService.delete(employee.getProfileImage().getId());
+        }*/
+
         changeLogService.create(employee, null, null, ipAddress);
 
         employee.changeState(EmployeeState.RESIGNED);
