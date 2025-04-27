@@ -37,7 +37,8 @@ public class DepartmentStatsServiceImpl implements DepartmentStatsService {
   @Transactional
   @CacheEvict(
       value = "departmentDistribution",
-      allEntries = true
+      allEntries = true,
+      cacheManager = "redisCacheManager"
   )
   public void createTodayStats() {
     // Department 별로 EmployeeState에 따라 3가지의 통계 테이블이 존재
@@ -86,7 +87,8 @@ public class DepartmentStatsServiceImpl implements DepartmentStatsService {
   @Transactional(readOnly = true)
   @Cacheable(
       value = "departmentDistribution",
-      key = "#p0 + #p1.toString()"
+      key = "#p0 + #p1.toString()",
+      cacheManager = "redisCacheManager"
   )
   public List<EmployeeDistributionDto> getDepartmentDistribution(EmployeeState status, LocalDate statDate) {
     List<DepartmentStats> departmentStatsList = departmentStatsRepository.findAllByStatDateAndEmployeeState(

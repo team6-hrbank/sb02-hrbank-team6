@@ -80,7 +80,8 @@ public class PositionStatsServiceImpl implements PositionStatsService {
   @Transactional(readOnly = true)
   @Cacheable(
       value = "positionDistribution",
-      key = "#p0 + #p1.toString()"
+      key = "#p0 + #p1.toString()",
+      cacheManager = "redisCacheManager"
   )
   public List<EmployeeDistributionDto> getPositionDistribution(EmployeeState status, LocalDate statDate) {
     List<PositionStats> positionStatsList = positionStatsRepository.findAllByStatDateAndEmployeeState(
