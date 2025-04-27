@@ -44,7 +44,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             throw new RestException(ErrorCode.EMAIL_ALREADY_EXISTS);
         }
 
-        int year = LocalDate.now().getYear();
+        int year = request.hireDate().getYear();
         String employeeNumber = generateEmployeeNumber(year);
 
         Department department = departmentRepository.findById(request.departmentId()).orElseThrow(() -> new RestException(ErrorCode.DEPARTMENT_NOT_FOUND));
