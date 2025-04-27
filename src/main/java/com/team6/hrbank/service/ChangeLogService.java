@@ -13,6 +13,6 @@ public interface ChangeLogService {
   ChangeLog create(Employee employeeBefore, Employee employeeAfter, String memo, String ipAddress);
   CursorPageResponseChangeLogDto getChangeLogs(ChangeLogSearchCondition condition);
   List<DiffDto> getChangeDetail(Long changeLogId);
-  Long getCount(Instant fromDate, Instant toDate);
+  long getCount(Instant fromDate, Instant toDate);
 
 }

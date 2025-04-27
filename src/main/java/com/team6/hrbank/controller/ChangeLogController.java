@@ -39,7 +39,7 @@ public class ChangeLogController {
       @RequestParam(required = false) Instant fromDate,
       @RequestParam(required = false) Instant toDate
   ) {
-    Long count = changeLogService.getCount(fromDate, toDate);
+    long count = changeLogService.getCount(fromDate, toDate);
     return ResponseEntity.ok(count);
   }
 
