@@ -1,4 +1,4 @@
-package com.team6.hrbank.service.Impl;
+package com.team6.hrbank.service;
 
 import com.team6.hrbank.dto.employeestats.EmployeeTrendDto;
 import com.team6.hrbank.entity.EmployeeState;
@@ -8,12 +8,13 @@ import com.team6.hrbank.exception.RestException;
 import com.team6.hrbank.mapper.EmployeeStatsMapper;
 import com.team6.hrbank.repository.EmployeeQueryRepository;
 import com.team6.hrbank.repository.EmployeeStatsRepository;
-import com.team6.hrbank.service.EmployeeStatsService;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
@@ -44,7 +45,9 @@ public class EmployeeStatsServiceImpl implements EmployeeStatsService {
       throw new RestException(ErrorCode.DUPLICATE_EMPLOYEESTATS);
     }
 
-    if (employeeStatsRepository.findByStatDate(prevDate).isEmpty()) {
+    Optional<EmployeeStats> employeeStats = employeeStatsRepository.findByStatDate(prevDate);
+
+    if (employeeStats.isEmpty()) {
       long joinedCount = currentCount;
       long leftCount = 0;
       EmployeeStats currentEmployeeStats = createEmployeeStats(currentDate, currentCount,
@@ -54,7 +57,7 @@ public class EmployeeStatsServiceImpl implements EmployeeStatsService {
       return;
     }
 
-    long prevCount = employeeStatsRepository.findByStatDate(prevDate).get().getEmployeeCount();
+    long prevCount = employeeStats.get().getEmployeeCount();
     long change = currentCount - prevCount;
     long joinedCount = change > 0 ? change : 0;
     long leftCount = change < 0 ? -change : 0;
@@ -95,11 +98,11 @@ public class EmployeeStatsServiceImpl implements EmployeeStatsService {
     // 프론트단에서 넘어온 Unit을 기준으로 statDate를 뽑아서 저장
     List<LocalDate> statDateList =
         switch (unitUpper) {
-          case "DAY" -> getDailyStatDateList(from, to);
-          case "WEEK" -> getWeeklyStatDateList(from, to);
-          case "MONTH" -> getMonthlyStatDateList(from, to);
-          case "QUARTER" -> getQuarterStatDateList(from, to);
-          case "YEAR" -> getYearlyStatDateList(from, to);
+          case "DAY" -> getStatDateList(from, to, ChronoUnit.DAYS, 1);
+          case "WEEK" -> getStatDateList(from, to, ChronoUnit.WEEKS, 1);
+          case "MONTH" -> getStatDateList(from, to, ChronoUnit.MONTHS, 1);
+          case "QUARTER" -> getStatDateList(from, to, ChronoUnit.MONTHS, 3);
+          case "YEAR" -> getStatDateList(from, to, ChronoUnit.YEARS, 1);
           default -> throw new RestException(ErrorCode.UNSUPPORTED_UNIT);
         };
 
@@ -129,63 +132,13 @@ public class EmployeeStatsServiceImpl implements EmployeeStatsService {
   }
 
 
-  private List<LocalDate> getDailyStatDateList(LocalDate from, LocalDate to) {
+  private List<LocalDate> getStatDateList(LocalDate from, LocalDate to, ChronoUnit unit, long amountToAdd) {
     List<LocalDate> statDateList = new ArrayList<>();
     LocalDate current = from;
-
     while (!current.isAfter(to)) {
       statDateList.add(current);
-      current = current.plusDays(1);
+      current = current.plus(amountToAdd, unit);
     }
-
-    return statDateList;
-  }
-
-  private List<LocalDate> getWeeklyStatDateList(LocalDate from, LocalDate to) {
-    List<LocalDate> statDateList = new ArrayList<>();
-    LocalDate current = from;
-
-    while (!current.isAfter(to)) {
-      statDateList.add(current);
-      current = current.plusWeeks(1);
-    }
-
-    return statDateList;
-  }
-
-  private List<LocalDate> getMonthlyStatDateList(LocalDate from, LocalDate to) {
-    List<LocalDate> statDateList = new ArrayList<>();
-    LocalDate current = from;
-
-    while (!current.isAfter(to)) {
-      statDateList.add(current);
-      current = current.plusMonths(1);
-    }
-
-    return statDateList;
-  }
-
-  private List<LocalDate> getQuarterStatDateList(LocalDate from, LocalDate to) {
-    List<LocalDate> statDateList = new ArrayList<>();
-    LocalDate current = from;
-
-    while (!current.isAfter(to)) {
-      statDateList.add(current);
-      current = current.plusMonths(3);
-    }
-
-    return statDateList;
-  }
-
-  private List<LocalDate> getYearlyStatDateList(LocalDate from, LocalDate to) {
-    List<LocalDate> statDateList = new ArrayList<>();
-    LocalDate current = from;
-
-    while (!current.isAfter(to)) {
-      statDateList.add(current);
-      current = current.plusYears(1);
-    }
-
     return statDateList;
   }
 

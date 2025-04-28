@@ -1,4 +1,4 @@
-package com.team6.hrbank.service.Impl;
+package com.team6.hrbank.service;
 
 import com.team6.hrbank.dto.employeestats.EmployeeDistributionDto;
 import com.team6.hrbank.entity.Department;
@@ -11,7 +11,6 @@ import com.team6.hrbank.repository.DepartmentRepository;
 import com.team6.hrbank.repository.DepartmentStatsRepository;
 import com.team6.hrbank.repository.EmployeeQueryRepository;
 import com.team6.hrbank.repository.EmployeeStatsRepository;
-import com.team6.hrbank.service.DepartmentStatsService;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -51,6 +50,7 @@ public class DepartmentStatsServiceImpl implements DepartmentStatsService {
     for (Department department : departmentList) {
       for (EmployeeState state : EmployeeState.values()) {
         if(departmentStatsRepository.findByStatDateAndEmployeeStateAndDepartmentName(current, state, department.getDepartmentName()).isPresent()) {
+          log.warn("부서별 분포 데이터 중복 발생으로 생성 실패: {}",current);
           throw new RestException(ErrorCode.DUPLICATE_DEPARTMENTSTATS);
         }
 
