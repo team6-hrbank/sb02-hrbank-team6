@@ -38,8 +38,9 @@ public class EmployeeController implements EmployeeApi {
     }
 
     @GetMapping
-    public CursorPageResponseEmployeeDto searchEmployees(EmployeeSearchCondition condition) {
-        return employeeService.searchEmployees(condition);
+    public ResponseEntity<CursorPageResponseEmployeeDto> searchEmployees(EmployeeSearchCondition condition) {
+        CursorPageResponseEmployeeDto result = employeeService.searchEmployees(condition);
+        return ResponseEntity.ok(result);
     }
 
     @PatchMapping("/{id}")
