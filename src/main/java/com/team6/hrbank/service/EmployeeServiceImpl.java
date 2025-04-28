@@ -118,9 +118,14 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         EmployeePosition position = validateAndParsePosition(request.position());
 
-        FileMetadata newProfileImage = null;
+        FileMetadata newProfileImage = employee.getProfileImage();
+
         if (profileImage != null && !profileImage.isEmpty()) {
             newProfileImage = fileMetadataService.create(profileImage);
+
+            if(employee.getProfileImage()!=null){
+                fileMetadataService.deleteById(employee.getProfileImage().getId());
+            }
         }
         employee.update(request, newDepartment, position, newProfileImage);
 
