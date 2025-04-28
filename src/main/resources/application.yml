@@ -1,0 +1,64 @@
+file:
+  upload-dir: test_fileDirs
+  backup-dir: test_backupDirs
+  error-dir: test_backErrorDirs
+
+spring:
+  application:
+    name: hrbank
+  datasource:
+    url: jdbc:postgresql://postgres.railway.internal:5432/railway
+    username: postgres
+    password: ENC(gvN5Vn7ewcHp0as4Lqx2DJGlwwQHEDsTZHMsMyy3IDesuvT44n3b1a7RSzYOwUif)
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+      idle-timeout: 60000
+  jpa:
+    hibernate:
+      ddl-auto: none
+    defer-datasource-initialization: true
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+      # JPA? ??? ????(Persistence Context)? ??? ???? ??
+    open-in-view: false
+  cache:
+    type: redis
+  data:
+    redis:
+      host: redis.railway.internal
+      port: 6379
+      password: ENC(EAm6kvBdxVc9geHXeOOE+h47snemXhG9XmmHJpdGdxyudYQfjN8Th9LvniipTz94)
+  sql:
+    init:
+      mode: never
+  logging:
+    level:
+      org:
+        hibernate:
+          SQL: WARN
+          orm.jdbc.bind: WARN
+        springframework:
+          data: WARN
+          cache: WARN
+      com:
+        sb02:
+          jpa_demo: INFO
+
+
+jasypt:
+  encryptor:
+    bean: jasyptStringEncryptor
+    password: ${JASYPT_ENCRYPTOR_PASSWORD} # 환경 변수에서 주입
+
+
+
+
+
+
+
