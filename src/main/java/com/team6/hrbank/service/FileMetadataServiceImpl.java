@@ -1,5 +1,6 @@
 package com.team6.hrbank.service;
 
+import com.team6.hrbank.entity.Employee;
 import com.team6.hrbank.entity.FileMetadata;
 import com.team6.hrbank.exception.ErrorCode;
 import com.team6.hrbank.exception.RestException;
@@ -63,5 +64,28 @@ public class FileMetadataServiceImpl implements FileMetadataService{
     } catch (IOException e) {
       throw new RestException(ErrorCode.FILE_SAVE_FAILED);
     }
+  }
+
+  @Override
+  public void deleteById(Long id) {
+    FileMetadata fileMetadata = fileMetadataRepository.findById(id)
+        .orElseThrow(() -> new RestException(ErrorCode.FILE_NOT_FOUND));
+
+    // 실제 파일 삭제
+    String fileName = fileMetadata.getFileName();
+    String baseDir = uploadDir;
+
+    Path path = Paths.get(baseDir, fileName);
+    java.io.File file = path.toFile();
+
+    if (file.exists()) {
+      boolean deleted = file.delete();
+      if (!deleted) {
+        throw new RuntimeException("파일 삭제 실패: " + file.getAbsolutePath());
+      }
+    }
+
+    // DB에서 메타데이터 삭제
+    fileMetadataRepository.deleteById(id);
   }
 }
