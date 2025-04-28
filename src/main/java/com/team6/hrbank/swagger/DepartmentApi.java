@@ -78,7 +78,7 @@ public interface DepartmentApi {
           @ApiResponse(responseCode = "404", description = "부서를 찾을 수 없음")
       }
   )
-  ResponseEntity<DepartmentDto> delete(
+  ResponseEntity<Void> delete(
       @Parameter(
           description = "삭제할 부서 ID",
           example = "1",
