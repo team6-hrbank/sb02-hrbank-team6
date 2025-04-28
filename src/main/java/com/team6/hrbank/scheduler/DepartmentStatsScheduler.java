@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 public class DepartmentStatsScheduler {
   private final DepartmentStatsService departmentStatsService;
 
-  @Scheduled(cron = "0 50 08 * * *")
+  @Scheduled(cron = "0 55 08 * * *")
   @SchedulerLock(name = "batchCreateDepartmentStats", lockAtMostFor = "10m")
   public void batchCreateDepartmentStats() {
     departmentStatsService.createTodayStats();
