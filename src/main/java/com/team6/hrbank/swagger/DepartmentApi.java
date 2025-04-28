@@ -7,15 +7,11 @@ import com.team6.hrbank.dto.department.DepartmentSearchCondition;
 import com.team6.hrbank.dto.department.DepartmentUpdateRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Department-Controller", description = "부서 관련 API")
-@RequestMapping("/api/departments")
 public interface DepartmentApi {
 
   @Operation(
@@ -26,55 +22,69 @@ public interface DepartmentApi {
           @ApiResponse(responseCode = "400", description = "요청 값이 잘못됨")
       }
   )
-  @PostMapping
   ResponseEntity<DepartmentDto> create(
-      @Parameter(description = "생성할 부서 정보", required = true)
-      @Valid @RequestBody DepartmentCreateRequest request
+      @Parameter(
+          description = "생성할 부서 정보",
+          required = true
+      )
+      DepartmentCreateRequest request
   );
 
   @Operation(
       summary = "부서 조회",
-      description = "부서 ID를 기반으로 부서 정보를 조회합니다.",
+      description = "ID를 기반으로 부서 정보를 조회합니다.",
       responses = {
           @ApiResponse(responseCode = "200", description = "부서 조회 성공"),
           @ApiResponse(responseCode = "404", description = "부서를 찾을 수 없음")
       }
   )
-  @GetMapping("/{id}")
   ResponseEntity<DepartmentDto> find(
-      @Parameter(description = "조회할 부서 ID", example = "1", required = true, in = ParameterIn.PATH)
-      @PathVariable Long id
+      @Parameter(
+          description = "조회할 부서 ID",
+          example = "1",
+          required = true
+      )
+      Long id
   );
 
   @Operation(
       summary = "부서 수정",
-      description = "부서 ID를 기반으로 부서 정보를 수정합니다.",
+      description = "ID를 기반으로 부서 정보를 수정합니다.",
       responses = {
           @ApiResponse(responseCode = "200", description = "부서 수정 성공"),
           @ApiResponse(responseCode = "400", description = "요청 값이 잘못됨"),
           @ApiResponse(responseCode = "404", description = "부서를 찾을 수 없음")
       }
   )
-  @PatchMapping("/{id}")
   ResponseEntity<DepartmentDto> update(
-      @Parameter(description = "수정할 부서 ID", example = "1", required = true, in = ParameterIn.PATH)
-      @PathVariable Long id,
-      @Parameter(description = "수정할 부서 정보", required = true)
-      @Valid @RequestBody DepartmentUpdateRequest request
+      @Parameter(
+          description = "수정할 부서 ID",
+          example = "1",
+          required = true
+      )
+      Long id,
+      @Parameter(
+          description = "수정할 부서 정보",
+          required = true
+      )
+      DepartmentUpdateRequest request
   );
 
   @Operation(
       summary = "부서 삭제",
-      description = "부서 ID를 기반으로 부서를 삭제합니다.",
+      description = "ID를 기반으로 부서를 삭제합니다.",
       responses = {
           @ApiResponse(responseCode = "204", description = "부서 삭제 성공"),
           @ApiResponse(responseCode = "404", description = "부서를 찾을 수 없음")
       }
   )
-  @DeleteMapping("/{id}")
   ResponseEntity<Void> delete(
-      @Parameter(description = "삭제할 부서 ID", example = "1", required = true, in = ParameterIn.PATH)
-      @PathVariable Long id
+      @Parameter(
+          description = "삭제할 부서 ID",
+          example = "1",
+          required = true
+      )
+      Long id
   );
 
   @Operation(
@@ -84,9 +94,11 @@ public interface DepartmentApi {
           @ApiResponse(responseCode = "200", description = "조회 성공")
       }
   )
-  @GetMapping
   ResponseEntity<CursorPageResponseDepartmentDto> getDepartments(
-      @Parameter(description = "부서 검색 조건", required = false)
-      @Valid DepartmentSearchCondition condition
+      @Parameter(
+          description = "부서 검색 조건, (예: ), 기본값: ",
+          required = false
+      )
+      DepartmentSearchCondition condition
   );
 }
