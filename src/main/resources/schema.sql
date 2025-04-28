@@ -1,7 +1,3 @@
-CREATE TYPE change_type AS ENUM ('CREATED', 'UPDATED', 'DELETED');
-CREATE TYPE backup_status AS ENUM ('IN_PROGRESS', 'COMPLETED', 'FAILED', 'SKIPPED');
-
-
 CREATE TABLE file_metadata(
                               id BIGSERIAL PRIMARY KEY,
                               file_name VARCHAR(50) NOT NULL,
@@ -38,12 +34,10 @@ CREATE TABLE employees (
 );
 
 
-
-
 CREATE TABLE change_logs (
                              id BIGSERIAL PRIMARY KEY,
                              employee_id BIGINT,
-                             type change_type NOT NULL,
+                             type VARCHAR(20) NOT NULL,
                              memo VARCHAR(255),
                              ip_address VARCHAR(20) NOT NULL,
                              created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
@@ -73,7 +67,7 @@ CREATE TABLE backup_histories(
                                  operator VARCHAR(25) NOT NULL,
                                  started_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
                                  ended_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                                 status backup_status NOT NULL,
+                                 status VARCHAR(20) NOT NULL,
                                  backup_file_id BIGINT,
 
                                  CONSTRAINT backup_file_fk
@@ -89,7 +83,6 @@ CREATE TABLE employee_stats (
                                 left_employee_count BIGINT NOT NULL,
                                 created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
                                 stat_date DATE NOT NULL UNIQUE
-
 );
 
 CREATE TABLE department_stats (
