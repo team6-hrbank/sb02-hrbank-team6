@@ -53,7 +53,7 @@ spring:
 
 jasypt:
   encryptor:
-    bean: jasyptStringEncryptor
+    bean: jasyptEncryptor
     password: ${JASYPT_ENCRYPTOR_PASSWORD} # 환경 변수에서 주입
 
 
