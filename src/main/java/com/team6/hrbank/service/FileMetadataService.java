@@ -8,5 +8,4 @@ public interface FileMetadataService {
   Optional<FileMetadata> findById(Long id);
   FileMetadata create(MultipartFile file);
   void deleteById(Long id);
-
 }

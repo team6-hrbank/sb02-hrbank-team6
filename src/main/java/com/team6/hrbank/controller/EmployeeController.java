@@ -54,7 +54,7 @@ public class EmployeeController implements EmployeeApi {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<EmployeeDto> deleteEmployee(
+    public ResponseEntity<Void> deleteEmployee(
         @PathVariable Long id,
         HttpServletRequest httpRequest) {
         employeeService.deleteById(id, httpRequest.getRemoteAddr());

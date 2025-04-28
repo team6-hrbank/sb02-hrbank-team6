@@ -42,7 +42,7 @@ public class DepartmentController implements DepartmentApi {
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<DepartmentDto> delete(@PathVariable Long id) {
+  public ResponseEntity<Void> delete(@PathVariable Long id) {
     departmentService.deleteById(id);
     return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
   }
