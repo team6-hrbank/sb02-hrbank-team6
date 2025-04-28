@@ -36,7 +36,7 @@ public class Employee {
     private Department department;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "employee_position", nullable = false)
+    @Column(name = "position", nullable = false)
     private EmployeePosition employeePosition;
 
     @Column(nullable = false)
@@ -60,6 +60,10 @@ public class Employee {
         this.employeeState = request.status();
         this.profileImage = newProfileImage;
     }
+    public void deleteProfile() {
+        this.profileImage = null;
+    }
+
 
     public void changeState(EmployeeState state) {
         this.employeeState = state;
