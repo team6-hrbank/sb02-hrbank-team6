@@ -30,14 +30,19 @@ public interface EmployeeMapper {
     @Mapping(target = "email", source = "email")
     @Mapping(target = "departmentId", source = "department.id")
     @Mapping(target = "departmentName", source = "department.departmentName")
-    @Mapping(target = "position", source = "employeePosition",qualifiedByName = "enumToString")
+    @Mapping(target = "position", source = "employeePosition", qualifiedByName = "positionToLabel")
     @Mapping(target = "hireDate", source = "hireDate")
-    @Mapping(target = "status", source = "employeeState",qualifiedByName = "enumToString")
+    @Mapping(target = "status", source = "employeeState", qualifiedByName = "enumToString")
     @Mapping(target = "profileImageId", source = "profileImage.id")
     EmployeeDto toDto(Employee employee);
 
     @Named("enumToString")
     static String enumToString(Enum<?> e) {
         return e != null ? e.name() : null;
+    }
+
+    @Named("positionToLabel")
+    static String positionLabel(EmployeePosition position) {
+        return position != null ? position.getLabel() : null;
     }
 }
