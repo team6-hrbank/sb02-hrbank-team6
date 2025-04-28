@@ -2,6 +2,8 @@ package com.team6.hrbank.exception;
 
 import java.util.NoSuchElementException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -44,4 +46,19 @@ public class GlobalExceptionHandler {
     return ResponseEntity.status(ErrorCode.INTERNAL_SERVER_ERROR.getStatus()).body(errorResponse);
   }
 
+  // 유효성 검사 오류 처리
+  @ExceptionHandler(MethodArgumentNotValidException.class)
+  public ResponseEntity<ErrorResponse> handleValidationException(MethodArgumentNotValidException ex) {
+    FieldError fieldError = ex.getBindingResult().getFieldErrors().stream()
+        .findFirst()
+        .orElse(null);
+
+    String message = (fieldError != null)
+        ? fieldError.getDefaultMessage()
+        : ErrorCode.BAD_REQUEST.getMessage();
+
+    ErrorResponse errorResponse = new ErrorResponse(ErrorCode.BAD_REQUEST, message);
+
+    return ResponseEntity.status(ErrorCode.BAD_REQUEST.getStatus()).body(errorResponse);
+  }
 }

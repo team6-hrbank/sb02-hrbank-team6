@@ -130,3 +130,4 @@ CREATE TABLE shedlock (
 create index idx_employee_stats_stat_date
     on employee_stats(stat_date ASC);
 
+ALTER TABLE departments ALTER COLUMN department_name TYPE VARCHAR(100) COLLATE "ko-x-icu";

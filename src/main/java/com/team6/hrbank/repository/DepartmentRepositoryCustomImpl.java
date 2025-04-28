@@ -59,16 +59,14 @@ public class DepartmentRepositoryCustomImpl implements DepartmentRepositoryCusto
         .where(whereCondition);
 
     if ("name".equals(condition.sortField())) {
-      query.orderBy(
-          "desc".equalsIgnoreCase(condition.sortDirection())
-              ? department.departmentName.desc() : department.departmentName.asc()
-      );
+      if ("desc".equalsIgnoreCase(condition.sortDirection())) {
+        query.orderBy(department.departmentName.desc(), department.id.desc());
+      } else query.orderBy(department.departmentName.asc(), department.id.asc());
+
     } else if ("establishedDate".equals(condition.sortField())) {
-      query.orderBy(
-          "desc".equalsIgnoreCase(condition.sortDirection())
-              ? department.departmentEstablishedDate.desc()
-              : department.departmentEstablishedDate.asc()
-      );
+      if ("desc".equalsIgnoreCase(condition.sortDirection())) {
+        query.orderBy(department.departmentEstablishedDate.desc(), department.id.desc());
+      } else query.orderBy(department.departmentEstablishedDate.asc(), department.id.asc());
     }
 
     return query.limit(condition.size() + 1).fetch();
