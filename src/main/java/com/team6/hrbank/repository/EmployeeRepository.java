@@ -18,4 +18,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> , Empl
     boolean existsByEmail(String email);
 
     boolean existsByEmployeeNumber(String employeeNumber);
+
+    List<Employee> findTop20ByIdGreaterThanOrderByIdAsc(Long lastId);
 }

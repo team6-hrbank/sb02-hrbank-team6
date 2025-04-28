@@ -20,7 +20,7 @@ public class FileMetadata {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(name = "file_name", length = 32, nullable = false)
+  @Column(name = "file_name", length = 50, nullable = false)
   private String fileName;
 
   @Column(name = "content_type", length = 50, nullable = false)

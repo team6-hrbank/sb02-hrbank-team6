@@ -13,6 +13,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "backup_histories")
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -43,5 +44,18 @@ public class BackupHistory {
     this.endedAt = endedAt;
     this.backupFile = newBackupFile;
   }
+
+  public void updateCompleted(FileMetadata backupFile) {
+    this.backupFile = backupFile;
+    this.status = BackupStatus.COMPLETED;
+    this.endedAt = Instant.now();
+  }
+
+  public void updateFailed(FileMetadata errorFile) {
+    this.backupFile = errorFile;
+    this.status = BackupStatus.FAILED;
+    this.endedAt = Instant.now();
+  }
+
 
 }

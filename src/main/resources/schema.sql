@@ -4,7 +4,7 @@ CREATE TYPE backup_status AS ENUM ('IN_PROGRESS', 'COMPLETED', 'FAILED', 'SKIPPE
 
 CREATE TABLE file_metadata(
                               id BIGSERIAL PRIMARY KEY,
-                              file_name VARCHAR(32) NOT NULL,
+                              file_name VARCHAR(50) NOT NULL,
                               content_type VARCHAR(50) NOT NULL,
                               file_size INTEGER NOT NULL
 );
@@ -70,7 +70,7 @@ CREATE TABLE change_log_details (
 
 CREATE TABLE backup_histories(
                                  id BIGSERIAL PRIMARY KEY,
-                                 operator VARCHAR(15) NOT NULL,
+                                 operator VARCHAR(25) NOT NULL,
                                  started_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
                                  ended_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                                  status backup_status NOT NULL,
