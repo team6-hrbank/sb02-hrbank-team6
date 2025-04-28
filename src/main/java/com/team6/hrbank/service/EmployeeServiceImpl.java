@@ -136,7 +136,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 
         if (employee.getProfileImage() != null) {
-            fileMetadataService.delete(employee.getProfileImage().getId());
+            fileMetadataService.deleteById(employee.getProfileImage().getId());
         }
 
         changeLogService.create(employee, null, null, ipAddress);
