@@ -8,6 +8,7 @@ import com.team6.hrbank.exception.RestException;
 import com.team6.hrbank.service.DepartmentStatsService;
 import com.team6.hrbank.service.EmployeeStatsService;
 import com.team6.hrbank.service.PositionStatsService;
+import com.team6.hrbank.swagger.DashBoardApi;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/employees/stats")
-public class DashBoardController {
+public class DashBoardController implements DashBoardApi {
 
   private final EmployeeStatsService employeeStatsService;
   private final DepartmentStatsService departmentStatsService;

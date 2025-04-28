@@ -4,6 +4,7 @@ import com.team6.hrbank.dto.employee.*;
 import com.team6.hrbank.entity.EmployeeState;
 import com.team6.hrbank.service.EmployeeService;
 
+import com.team6.hrbank.swagger.EmployeeApi;
 import jakarta.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 
@@ -16,7 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequestMapping("/api/employees")
 @RequiredArgsConstructor
-public class EmployeeController {
+public class EmployeeController implements EmployeeApi {
 
     private final EmployeeService employeeService;
 

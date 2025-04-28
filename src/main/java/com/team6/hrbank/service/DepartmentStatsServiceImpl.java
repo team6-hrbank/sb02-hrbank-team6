@@ -1,4 +1,4 @@
-package com.team6.hrbank.service.Impl;
+package com.team6.hrbank.service;
 
 import com.team6.hrbank.dto.employeestats.EmployeeDistributionDto;
 import com.team6.hrbank.entity.Department;
@@ -11,7 +11,6 @@ import com.team6.hrbank.repository.DepartmentRepository;
 import com.team6.hrbank.repository.DepartmentStatsRepository;
 import com.team6.hrbank.repository.EmployeeQueryRepository;
 import com.team6.hrbank.repository.EmployeeStatsRepository;
-import com.team6.hrbank.service.DepartmentStatsService;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -38,7 +37,8 @@ public class DepartmentStatsServiceImpl implements DepartmentStatsService {
   @Transactional
   @CacheEvict(
       value = "departmentDistribution",
-      allEntries = true
+      allEntries = true,
+      cacheManager = "redisCacheManager"
   )
   public void createTodayStats() {
     // Department 별로 EmployeeState에 따라 3가지의 통계 테이블이 존재
@@ -51,6 +51,7 @@ public class DepartmentStatsServiceImpl implements DepartmentStatsService {
     for (Department department : departmentList) {
       for (EmployeeState state : EmployeeState.values()) {
         if(departmentStatsRepository.findByStatDateAndEmployeeStateAndDepartmentName(current, state, department.getDepartmentName()).isPresent()) {
+          log.warn("부서별 분포 데이터 중복 발생으로 생성 실패: {}",current);
           throw new RestException(ErrorCode.DUPLICATE_DEPARTMENTSTATS);
         }
 
@@ -86,7 +87,8 @@ public class DepartmentStatsServiceImpl implements DepartmentStatsService {
   @Transactional(readOnly = true)
   @Cacheable(
       value = "departmentDistribution",
-      key = "#p0 + #p1.toString()"
+      key = "#p0 + #p1.toString()",
+      cacheManager = "redisCacheManager"
   )
   public List<EmployeeDistributionDto> getDepartmentDistribution(EmployeeState status, LocalDate statDate) {
     List<DepartmentStats> departmentStatsList = departmentStatsRepository.findAllByStatDateAndEmployeeState(

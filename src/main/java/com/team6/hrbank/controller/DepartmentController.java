@@ -6,6 +6,7 @@ import com.team6.hrbank.dto.department.DepartmentDto;
 import com.team6.hrbank.dto.department.DepartmentSearchCondition;
 import com.team6.hrbank.dto.department.DepartmentUpdateRequest;
 import com.team6.hrbank.service.DepartmentService;
+import com.team6.hrbank.swagger.DepartmentApi;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/departments")
 @RequiredArgsConstructor
-public class DepartmentController {
+public class DepartmentController implements DepartmentApi {
   private final DepartmentService departmentService;
 
   @PostMapping
@@ -36,7 +37,7 @@ public class DepartmentController {
   }
 
   @PatchMapping("/{id}")
-  public ResponseEntity<DepartmentDto> update(@PathVariable Long id, @RequestBody DepartmentUpdateRequest request) {
+  public ResponseEntity<DepartmentDto> update(@PathVariable Long id, @Valid @RequestBody DepartmentUpdateRequest request) {
     return ResponseEntity.status(HttpStatus.OK).body(departmentService.update(id, request));
   }
 

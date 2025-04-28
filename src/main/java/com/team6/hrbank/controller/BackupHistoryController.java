@@ -9,6 +9,7 @@ import com.team6.hrbank.entity.BackupStatus;
 import com.team6.hrbank.service.BackupHistoryService;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
+import com.team6.hrbank.swagger.BackupHistoryApi;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/backups")
-public class BackupHistoryController {
+public class BackupHistoryController implements BackupHistoryApi {
   private final BackupHistoryService backupHistoryService;
 
   @GetMapping

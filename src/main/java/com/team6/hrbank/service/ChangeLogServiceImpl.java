@@ -73,16 +73,18 @@ public class ChangeLogServiceImpl implements ChangeLogService {
         nextIdAfter = lastContent.id();
       } else if ("ipAddress".equals(condition.sortField())) {
         nextCursor = lastContent.ipAddress();
-        // `ipAddress` 기준일 땐 `idAfter`는 의미 없음
+        nextIdAfter = lastContent.id();
       }
     }
+
+    long totalElements = changeLogRepository.countByFilter(condition);
 
     return new CursorPageResponseChangeLogDto(
         contents,
         nextCursor,
         nextIdAfter,
         condition.size(),
-        (long) contents.size(),
+        totalElements,
         hasNext
     );
   }
@@ -98,7 +100,7 @@ public class ChangeLogServiceImpl implements ChangeLogService {
 
   @Transactional(readOnly = true)
   @Override
-  public Long getCount(Instant fromDate, Instant toDate) {
+  public long getCount(Instant fromDate, Instant toDate) {
     Instant now = Instant.now();
     Instant oneWeekAgo = now.minus(7, ChronoUnit.DAYS);
 

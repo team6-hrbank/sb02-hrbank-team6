@@ -76,6 +76,7 @@ public class ChangeLogRepositoryCustomImpl implements ChangeLogRepositoryCustom 
     // 쿼리 생성
     JPAQuery<ChangeLog> query = queryFactory
         .selectFrom(changeLog)
+        .join(changeLog.employee).fetchJoin()
         .where(whereCondition);
 
     // 정렬 조건 (id까지 포함한 복합 정렬)
@@ -94,6 +95,20 @@ public class ChangeLogRepositoryCustomImpl implements ChangeLogRepositoryCustom 
     }
 
     return query.limit(limit).fetch();
+  }
+
+  @Override
+  public long countByFilter(ChangeLogSearchCondition condition) {
+    QChangeLog changeLog = QChangeLog.changeLog;
+    BooleanBuilder whereCondition = buildConditions(condition, changeLog);
+
+    Long count = queryFactory
+        .select(changeLog.count())
+        .from(changeLog)
+        .where(whereCondition)
+        .fetchOne();
+
+    return count != null ? count : 0L;
   }
 
   private BooleanBuilder buildConditions(ChangeLogSearchCondition condition, QChangeLog changeLog) {
