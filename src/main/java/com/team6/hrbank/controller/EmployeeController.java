@@ -38,8 +38,9 @@ public class EmployeeController implements EmployeeApi {
     }
 
     @GetMapping
-    public CursorPageResponseEmployeeDto searchEmployees(EmployeeSearchCondition condition) {
-        return employeeService.searchEmployees(condition);
+    public ResponseEntity<CursorPageResponseEmployeeDto> searchEmployees(EmployeeSearchCondition condition) {
+        CursorPageResponseEmployeeDto result = employeeService.searchEmployees(condition);
+        return ResponseEntity.ok(result);
     }
 
     @PatchMapping("/{id}")
@@ -54,7 +55,7 @@ public class EmployeeController implements EmployeeApi {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<EmployeeDto> deleteEmployee(
+    public ResponseEntity<Void> deleteEmployee(
         @PathVariable Long id,
         HttpServletRequest httpRequest) {
         employeeService.deleteById(id, httpRequest.getRemoteAddr());
