@@ -40,9 +40,9 @@ public class FileMetadataServiceImpl implements FileMetadataService{
       String contentType = file.getContentType();
       int fileSize = (int) file.getSize();
 
-      // 2. DB에 메타데이터 저장
+      // 2. DB에 메타데이터 저장, 뒤에서 이름 업데이트
       FileMetadata metadata = FileMetadata.builder()
-          .fileName(originalName)
+          .fileName("")
           .contentType(contentType)
           .fileSize(fileSize)
           .build();
@@ -59,6 +59,11 @@ public class FileMetadataServiceImpl implements FileMetadataService{
       Path path = Paths.get(uploadDir, storedFileName);
       //multipart 객체를, getInputStream으로 파일 내용을 꺼내서, 지정한 경로에 복사(저장)
       Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+
+      metadata = metadata.toBuilder()
+          .fileName(storedFileName)
+          .build();
+      fileMetadataRepository.save(metadata);
 
       return metadata;
     } catch (IOException e) {

@@ -62,7 +62,6 @@ public class FileMetadataController implements FileMetadataApi {
     }
 
     // 실제 파일 경로, 응답 포맷팅
-    // 이미지를 다운로드 받을 일이 있나? 일단 킵
     Path path = Paths.get(baseDir, fileName);
     Resource resource = new FileSystemResource(path);
 
@@ -77,12 +76,12 @@ public class FileMetadataController implements FileMetadataApi {
         .body(resource);
   }
 
-//  // 파일 생성 테스트용 API
-//  @PostMapping("/create")
-//  public ResponseEntity<FileMetadata> createFile(@RequestParam("file") MultipartFile multipartFile) {
-//    FileMetadata saved = fileMetadataService.create(multipartFile);
-//    return ResponseEntity.ok(saved);
-//  }
+  // 파일 생성 테스트용 API
+  @PostMapping("/create")
+  public ResponseEntity<FileMetadata> createFile(@RequestParam("file") MultipartFile multipartFile) {
+    FileMetadata saved = fileMetadataService.create(multipartFile);
+    return ResponseEntity.ok(saved);
+  }
 //
 //  // 테스트용
 //  @GetMapping("/latest")

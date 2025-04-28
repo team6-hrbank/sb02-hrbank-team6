@@ -11,10 +11,10 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "file_metadata")
+@Builder(toBuilder = true)
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class FileMetadata {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
