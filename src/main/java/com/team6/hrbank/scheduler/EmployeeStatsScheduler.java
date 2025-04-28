@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 public class EmployeeStatsScheduler {
   private final EmployeeStatsService employeeStatsService;
 
-  @Scheduled(cron = "0 50 08 * * *")
+  @Scheduled(cron = "0 55 08 * * *")
   @SchedulerLock(name = "batchCreateEmployeeStats", lockAtMostFor = "10m")
   public void batchCreateEmployeeStats() {
     employeeStatsService.createTodayStats();
