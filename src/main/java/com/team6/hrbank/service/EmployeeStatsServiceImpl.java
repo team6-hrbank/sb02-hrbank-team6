@@ -74,7 +74,8 @@ public class EmployeeStatsServiceImpl implements EmployeeStatsService {
   @Cacheable(
       value = "employeeTrend",
       key = "#p2", // unit 별로 캐시 생성 (월별 / 주별 / 일별 / 분기별 / 연도별)
-      condition = "#p0 == null and #p1 == null" // null(기본값)인 경우에만 캐싱
+      condition = "#p0 == null and #p1 == null", // null(기본값)인 경우에만 캐싱,
+      cacheManager = "redisCacheManager"
   )
   public List<EmployeeTrendDto> getEmployeeTrend(LocalDate from, LocalDate to, String unit) {
     // null일 경우 기본값 지정

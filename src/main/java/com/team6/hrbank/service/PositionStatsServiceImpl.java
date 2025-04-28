@@ -80,7 +80,8 @@ public class PositionStatsServiceImpl implements PositionStatsService {
   @Transactional(readOnly = true)
   @Cacheable(
       value = "positionDistribution",
-      key = "#p0 + #p1.toString()"
+      key = "#p0 + #p1.toString()",
+      cacheManager = "redisCacheManager"
   )
   public List<EmployeeDistributionDto> getPositionDistribution(EmployeeState status, LocalDate statDate) {
     List<PositionStats> positionStatsList = positionStatsRepository.findAllByStatDateAndEmployeeState(
@@ -107,7 +108,7 @@ public class PositionStatsServiceImpl implements PositionStatsService {
           long count = positionStats.getEmployeeCount();
           double percentage = (double) count / totalEmployeeCount * 100;
           percentage = Math.round(percentage * 10.0) / 10.0;
-          return new EmployeeDistributionDto(positionStats.getPositionName().name(), count,
+          return new EmployeeDistributionDto(positionStats.getPositionName().getLabel(), count,
               percentage);
         })
         .toList();
