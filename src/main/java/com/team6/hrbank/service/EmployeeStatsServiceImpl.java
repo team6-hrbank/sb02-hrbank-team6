@@ -35,7 +35,9 @@ public class EmployeeStatsServiceImpl implements EmployeeStatsService {
 
   @Override
   @Transactional
-  @CacheEvict(value = "employeeTrend", allEntries = true) // 배치 생성이 되면, 캐시 업데이트를 해야하므로 관련된 모든 캐시 삭제 -> 첫 조회시 캐시 생성
+  @CacheEvict(value = "employeeTrend",
+      allEntries = true,
+      cacheManager = "redisCacheManager") // 배치 생성이 되면, 캐시 업데이트를 해야하므로 관련된 모든 캐시 삭제 -> 첫 조회시 캐시 생성
   public void createTodayStats() {
     LocalDate currentDate = LocalDate.now(ZoneId.of("Asia/Seoul"));
     LocalDate prevDate = currentDate.minusDays(1);

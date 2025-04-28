@@ -4,6 +4,7 @@ import com.team6.hrbank.entity.FileMetadata;
 import com.team6.hrbank.exception.ErrorCode;
 import com.team6.hrbank.exception.RestException;
 import com.team6.hrbank.service.FileMetadataService;
+import com.team6.hrbank.swagger.FileMetadataApi;
 import java.time.Duration;
 import java.time.Instant;
 import org.springframework.core.io.Resource;
@@ -28,7 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/files")
-public class FileMetadataController {
+public class FileMetadataController implements FileMetadataApi {
   private final FileMetadataService fileMetadataService;
 
   @GetMapping("/{id}/download")
