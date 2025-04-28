@@ -53,7 +53,7 @@ public class EmployeeController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<EmployeeDto> deleteEmployee(
+    public ResponseEntity<Void> deleteEmployee(
         @PathVariable Long id,
         HttpServletRequest httpRequest) {
         employeeService.deleteById(id, httpRequest.getRemoteAddr());
