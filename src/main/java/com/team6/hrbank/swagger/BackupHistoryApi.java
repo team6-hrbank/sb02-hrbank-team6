@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 
 @Tag(name = "Backup-Controller", description = "백업 이력 관련 API")
@@ -19,7 +20,7 @@ public interface BackupHistoryApi {
           @ApiResponse(responseCode = "500", description = "서버 오류 (백업 생성 실패)")
       }
   )
-  ResponseEntity<BackupDto> createBackup();
+  ResponseEntity<BackupDto> createBackup(HttpServletRequest request);
 
   @Operation(
       summary = "가장 최근 백업 조회",
