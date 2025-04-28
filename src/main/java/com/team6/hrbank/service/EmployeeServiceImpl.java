@@ -134,6 +134,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(() -> new RestException(ErrorCode.EMPLOYEE_NOT_FOUND));
 
+        employee.deleteProfile();
 
         if (employee.getProfileImage() != null) {
             fileMetadataService.deleteById(employee.getProfileImage().getId());
