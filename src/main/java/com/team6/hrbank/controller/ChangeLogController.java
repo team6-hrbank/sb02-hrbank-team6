@@ -4,6 +4,7 @@ import com.team6.hrbank.dto.changeLog.ChangeLogSearchCondition;
 import com.team6.hrbank.dto.changeLog.CursorPageResponseChangeLogDto;
 import com.team6.hrbank.dto.changeLog.DiffDto;
 import com.team6.hrbank.service.ChangeLogService;
+import com.team6.hrbank.swagger.ChangeLogApi;
 import java.time.Instant;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/change-logs")
-public class ChangeLogController {
+public class ChangeLogController implements ChangeLogApi {
 
   private final ChangeLogService changeLogService;
 

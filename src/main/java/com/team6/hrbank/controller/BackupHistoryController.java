@@ -1,10 +1,9 @@
 package com.team6.hrbank.controller;
 
-import static com.team6.hrbank.entity.BackupStatus.IN_PROGRESS;
-
 import com.team6.hrbank.dto.data.BackupDto;
 import com.team6.hrbank.entity.BackupStatus;
 import com.team6.hrbank.service.BackupHistoryService;
+import com.team6.hrbank.swagger.BackupHistoryApi;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/backups")
-public class BackupHistoryController {
+public class BackupHistoryController implements BackupHistoryApi {
   private final BackupHistoryService backupHistoryService;
 
   @PostMapping

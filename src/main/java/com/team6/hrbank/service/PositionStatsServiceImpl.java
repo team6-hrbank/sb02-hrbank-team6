@@ -34,7 +34,8 @@ public class PositionStatsServiceImpl implements PositionStatsService {
   @Transactional
   @CacheEvict(
       value = "positionDistribution",
-      allEntries = true
+      allEntries = true,
+      cacheManager = "redisCacheManager"
   )
   public void createTodayStats() {
     LocalDate current = LocalDate.now(ZoneId.of("Asia/Seoul"));
