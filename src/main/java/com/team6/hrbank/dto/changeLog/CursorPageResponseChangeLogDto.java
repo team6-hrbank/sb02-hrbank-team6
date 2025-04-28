@@ -7,7 +7,7 @@ public record CursorPageResponseChangeLogDto(
     String nextCursor,
     Long nextIdAfter,
     int size,
-    Long totalElements,
+    long totalElements,
     boolean hasNext
 ) {
 

@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface ChangeLogRepositoryCustom {
   List<ChangeLog> findAllByFilter(ChangeLogSearchCondition conditions, int limit);
+  long countByFilter(ChangeLogSearchCondition condition);
 }
