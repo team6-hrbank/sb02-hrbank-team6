@@ -77,25 +77,25 @@ public class FileMetadataController implements FileMetadataApi {
         .body(resource);
   }
 
-  // 파일 생성 테스트용 API
-  @PostMapping("/create")
-  public ResponseEntity<FileMetadata> createFile(@RequestParam("file") MultipartFile multipartFile) {
-    FileMetadata saved = fileMetadataService.create(multipartFile);
-    return ResponseEntity.ok(saved);
-  }
-
-  // 테스트용
-  @GetMapping("/latest")
-  public ResponseEntity<Instant> getLatest() {
-    return ResponseEntity.ok(Instant.now().minus(Duration.ofDays(1)));
-  }
-
-  // 삭제 테스트용
-  @DeleteMapping("/{id}")
-  public void delete(@PathVariable Long id) {
-    System.out.println("삭제 요청");
-    fileMetadataService.deleteById(id);
-  }
+//  // 파일 생성 테스트용 API
+//  @PostMapping("/create")
+//  public ResponseEntity<FileMetadata> createFile(@RequestParam("file") MultipartFile multipartFile) {
+//    FileMetadata saved = fileMetadataService.create(multipartFile);
+//    return ResponseEntity.ok(saved);
+//  }
+//
+//  // 테스트용
+//  @GetMapping("/latest")
+//  public ResponseEntity<Instant> getLatest() {
+//    return ResponseEntity.ok(Instant.now().minus(Duration.ofDays(1)));
+//  }
+//
+//  // 삭제 테스트용
+//  @DeleteMapping("/{id}")
+//  public void delete(@PathVariable Long id) {
+//    System.out.println("삭제 요청");
+//    fileMetadataService.deleteById(id);
+//  }
 
 
 }
