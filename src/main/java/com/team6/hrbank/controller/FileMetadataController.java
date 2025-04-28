@@ -7,6 +7,7 @@ import com.team6.hrbank.service.FileMetadataService;
 import com.team6.hrbank.swagger.FileMetadataApi;
 import java.time.Duration;
 import java.time.Instant;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -32,17 +33,39 @@ import org.springframework.web.multipart.MultipartFile;
 public class FileMetadataController implements FileMetadataApi {
   private final FileMetadataService fileMetadataService;
 
+  @Value("${file.upload-dir}")
+  private String uploadDir;
+
+  @Value("${file.backup-dir}")
+  private String backupDir;
+
+  @Value("${file.error-dir}")
+  private String errorDir;
+
   @GetMapping("/{id}/download")
   public ResponseEntity<Resource> downloadFile(@PathVariable("id") Long id) {
     // 존재하지 않으면 404
     FileMetadata metadata = fileMetadataService.findById(id)
         .orElseThrow(() -> new RestException(ErrorCode.FILE_NOT_FOUND));
 
+    // 확장자에 따라 경로 결정
+    String fileName = metadata.getFileName();
+    String baseDir;
+
+    if (fileName.endsWith(".csv")) {
+      baseDir = backupDir;      // 백업 파일
+    } else if (fileName.endsWith(".log")) {
+      baseDir = errorDir;       // 에러 로그 파일
+    } else {
+      baseDir = uploadDir;      // 일반 업로드 파일 (이미지 등)
+    }
+
     // 실제 파일 경로, 응답 포맷팅
-    Path path = Paths.get("test_fileDirs", metadata.getId() + "_" + metadata.getFileName());
+    // 이미지를 다운로드 받을 일이 있나? 일단 킵
+    Path path = Paths.get(baseDir, fileName);
     Resource resource = new FileSystemResource(path);
 
-    // 파일이 실제로 존재하지 않는 경우도 예외 처리
+    // 파일이 실제로 존재하지 않는 경우 예외 처리
     if (!resource.exists()) {
       throw new RestException(ErrorCode.FILE_NOT_FOUND);
     }

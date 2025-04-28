@@ -8,6 +8,7 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface BackupMapper {
+
   @Mapping(target = "id", ignore = true)
   @Mapping(source = "dto.worker", target = "operator")
   @Mapping(source = "fileMetadata", target = "backupFile")

@@ -36,7 +36,7 @@ public class Employee {
     private Department department;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "position", nullable = false)
+    @Column(name = "employee_position", nullable = false)
     private EmployeePosition employeePosition;
 
     @Column(nullable = false)
@@ -65,4 +65,18 @@ public class Employee {
         this.employeeState = state;
     }
 
+    @Override
+    public String toString() {
+        return "Employee{" +
+            "id=" + id +
+            ", employeeNumber='" + employeeNumber + '\'' +
+            ", employeeName='" + employeeName + '\'' +
+            ", email='" + email + '\'' +
+            ", department=" + department +
+            ", employeePosition=" + employeePosition +
+            ", hireDate=" + hireDate +
+            ", employeeState=" + employeeState +
+            ", profileImage=" + profileImage +
+            '}';
+    }
 }
