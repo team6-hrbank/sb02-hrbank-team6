@@ -5,10 +5,7 @@ import com.team6.hrbank.dto.employee.EmployeeCreateRequest;
 import com.team6.hrbank.dto.employee.EmployeeDto;
 import com.team6.hrbank.dto.employee.EmployeeSearchCondition;
 import com.team6.hrbank.dto.employee.EmployeeUpdateRequest;
-import com.team6.hrbank.entity.Department;
-import com.team6.hrbank.entity.Employee;
-import com.team6.hrbank.entity.EmployeeState;
-import com.team6.hrbank.entity.FileMetadata;
+import com.team6.hrbank.entity.*;
 import com.team6.hrbank.exception.ErrorCode;
 import com.team6.hrbank.exception.RestException;
 import com.team6.hrbank.mapper.EmployeeMapper;
@@ -44,17 +41,19 @@ public class EmployeeServiceImpl implements EmployeeService {
             throw new RestException(ErrorCode.EMAIL_ALREADY_EXISTS);
         }
 
-        int year = LocalDate.now().getYear();
+        int year = request.hireDate().getYear();
         String employeeNumber = generateEmployeeNumber(year);
 
         Department department = departmentRepository.findById(request.departmentId()).orElseThrow(() -> new RestException(ErrorCode.DEPARTMENT_NOT_FOUND));
+
+        EmployeePosition position = validateAndParsePosition(request.position());
 
         FileMetadata newProfileImage = null;
         if (profileImage != null && !profileImage.isEmpty()) {
             newProfileImage = fileMetadataService.create(profileImage);
         }
 
-        Employee newEmployee = employeeMapper.toEntity(request, employeeNumber, department, newProfileImage);
+        Employee newEmployee = employeeMapper.toEntity(request, employeeNumber, department, position, newProfileImage);
         Employee savedEmployee = employeeRepository.save(newEmployee);
 
         changeLogService.create(null, savedEmployee, request.memo(), ipAddress);
@@ -98,7 +97,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 nextIdAfter,
                 pageSize,
                 total,
-                !content.isEmpty() && content.size() > pageSize
+                !content.isEmpty() && content.size() == pageSize
         );
 
     }
@@ -117,11 +116,13 @@ public class EmployeeServiceImpl implements EmployeeService {
         Department newDepartment = departmentRepository.findById(request.departmentId())
                 .orElseThrow(() -> new RestException(ErrorCode.DEPARTMENT_NOT_FOUND));
 
+        EmployeePosition position = validateAndParsePosition(request.position());
+
         FileMetadata newProfileImage = null;
         if (profileImage != null && !profileImage.isEmpty()) {
             newProfileImage = fileMetadataService.create(profileImage);
         }
-        employee.update(request, newDepartment, newProfileImage);
+        employee.update(request, newDepartment, position, newProfileImage);
 
         changeLogService.create(beforeUpdate, employee, request.memo(), ipAddress);
 
@@ -132,6 +133,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     public void deleteById(Long id, String ipAddress) {
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(() -> new RestException(ErrorCode.EMPLOYEE_NOT_FOUND));
+
+        //파일 삭제 서비스 구현시 주석 해제하겠습니다.
+        /*if (employee.getProfileImage() != null) {
+            fileMetadataService.delete(employee.getProfileImage().getId());
+        }*/
 
         changeLogService.create(employee, null, null, ipAddress);
 
@@ -157,6 +163,19 @@ public class EmployeeServiceImpl implements EmployeeService {
             if (!employeeRepository.existsByEmployeeNumber(employeeNumber)) {
                 return employeeNumber;
             }
+        }
+    }
+
+    private EmployeePosition validateAndParsePosition(String label) {
+        for (EmployeePosition position : EmployeePosition.values()) {
+            if (position.getLabel().equals(label)) {
+                return position;
+            }
+        }
+        try {
+            return EmployeePosition.valueOf(label);
+        } catch (IllegalArgumentException e) {
+            throw new RestException(ErrorCode.INVALID_POSITION);
         }
     }
 

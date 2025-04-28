@@ -51,11 +51,11 @@ public class Employee {
     @JoinColumn(name = "profile_image_id")
     private FileMetadata profileImage;
 
-    public void update(EmployeeUpdateRequest request, Department department, FileMetadata newProfileImage) {
+    public void update(EmployeeUpdateRequest request, Department department, EmployeePosition position, FileMetadata newProfileImage) {
         this.employeeName = request.name();
         this.email = request.email();
         this.department = department;
-        this.employeePosition = request.position();
+        this.employeePosition = position;
         this.hireDate = request.hireDate();
         this.employeeState = request.status();
         this.profileImage = newProfileImage;

@@ -61,7 +61,7 @@ public class EmployeeRepositoryCustomImpl implements EmployeeRepositoryCustom {
                         );
                     }
                 }
-                case "employeeName" -> {
+                case "name" -> {
                     if ("desc".equalsIgnoreCase(condition.sortDirection())) {
                         cursorCondition.and(
                                 employee.employeeName.lt(condition.cursor())
@@ -99,7 +99,7 @@ public class EmployeeRepositoryCustomImpl implements EmployeeRepositoryCustom {
                     query.orderBy(employee.hireDate.asc(), employee.id.asc());
                 }
             }
-            case "employeeName" -> {
+            case "name" -> {
                 if ("desc".equalsIgnoreCase(condition.sortDirection())) {
                     query.orderBy(employee.employeeName.desc(), employee.id.desc());
                 } else {

@@ -4,6 +4,7 @@ import com.team6.hrbank.dto.employee.EmployeeCreateRequest;
 import com.team6.hrbank.dto.employee.EmployeeDto;
 import com.team6.hrbank.entity.Department;
 import com.team6.hrbank.entity.Employee;
+import com.team6.hrbank.entity.EmployeePosition;
 import com.team6.hrbank.entity.FileMetadata;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -17,11 +18,11 @@ public interface EmployeeMapper {
     @Mapping(target = "employeeName", source = "request.name")
     @Mapping(target = "email", source = "request.email")
     @Mapping(target = "department", source = "department")
-    @Mapping(target = "employeePosition", source = "request.position")
+    @Mapping(target = "employeePosition", source = "position")
     @Mapping(target = "hireDate", source = "request.hireDate")
     @Mapping(target = "employeeState", ignore = true)
     @Mapping(target = "profileImage", source = "profileImage")
-    Employee toEntity(EmployeeCreateRequest request, String employeeNumber, Department department, FileMetadata profileImage);
+    Employee toEntity(EmployeeCreateRequest request, String employeeNumber, Department department, EmployeePosition position, FileMetadata profileImage);
 
 
     @Mapping(target = "id", source = "id")
