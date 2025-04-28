@@ -7,5 +7,5 @@ import java.util.Optional;
 public interface FileMetadataService {
   Optional<FileMetadata> findById(Long id);
   FileMetadata create(MultipartFile file);
-
+  void delete(Long id);
 }
