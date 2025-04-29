@@ -39,6 +39,8 @@
 
 ## ⚙️ 프로젝트 구조
 
+[프로젝트 계획서](https://www.notion.so/1dc6caf3785b80779f8dd1b59a0f73ca)
+
 <img width="874" alt="프로젝트 구조1" src="https://github.com/user-attachments/assets/280283d9-149a-4ad8-aeb1-ed766664e810" />
 <img width="851" alt="프로젝트 구조2" src="https://github.com/user-attachments/assets/71bf18e3-3dec-4b3f-8338-93632e9c21d8" />
 
@@ -80,7 +82,7 @@
 
 <br />
 
-[시연 영상]
+[시연 영상](docs/videos/6팀_hrbank_시연영상.mp4)
 [배포 링크](https://sb02-hrbank-team6-production.up.railway.app)
 
 <br />
@@ -99,4 +101,4 @@
 
 ## ✔ 최종 발표 자료
 
-[최종 발표 자료]()
+[최종 발표 자료](HRBANK_최종발표자료.pdf)
