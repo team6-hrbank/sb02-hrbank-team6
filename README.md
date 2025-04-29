@@ -39,7 +39,7 @@
 
 ## ⚙️ 프로젝트 구조
 
-[프로젝트 계획서](https://www.notion.so/1dc6caf3785b80779f8dd1b59a0f73ca)
+➡️ [프로젝트 계획서](https://www.notion.so/1dc6caf3785b80779f8dd1b59a0f73ca)
 
 <img width="874" alt="프로젝트 구조1" src="https://github.com/user-attachments/assets/280283d9-149a-4ad8-aeb1-ed766664e810" />
 <img width="851" alt="프로젝트 구조2" src="https://github.com/user-attachments/assets/71bf18e3-3dec-4b3f-8338-93632e9c21d8" />
@@ -82,9 +82,9 @@
 
 <br />
 
-[시연 영상](docs/videos/6팀_hrbank_시연영상.mp4)
+➡️ [시연 영상](docs/videos/6팀_hrbank_시연영상.mp4)
 
-[배포 링크](https://sb02-hrbank-team6-production.up.railway.app)
+➡️ [배포 링크](https://sb02-hrbank-team6-production.up.railway.app)
 
 <br />
 
@@ -92,7 +92,7 @@
 
 |이름|프로필|역할|
 |-|-|-|
-|**[공한나](https://github.com/HANNAKONG)**|![공한나_6팀](https://github.com/user-attachments/assets/fc551741-b0f1-4010-8c5c-9ec28e093bf8)|백엔드 - 수정 이력 관리 |
+|**[공한나](https://github.com/HANNAKONG)**|![공한나_6팀](https://github.com/user-attachments/assets/fc551741-b0f1-4010-8c5c-9ec28e093bf8)|백엔드 - 수정 이력 관리, 공통 모듈 관리 |
 |**[김현호](https://github.com/smthswt)**|![김현호_6팀](https://github.com/user-attachments/assets/00663b76-9a85-43fa-a248-b455fc92bd9d) |백엔드 - 파일 관리, 데이터 백업 관리 |
 |**[도효림](https://github.com/coderimspace)**| ![도효림_6팀](https://github.com/user-attachments/assets/915085af-ffa0-4ec0-929d-c71305e2006e) |백엔드 - 직원 정보 관리 |
 |**[양성준](https://github.com/GogiDosirak)**|![양성준_6팀](https://github.com/user-attachments/assets/16eb9a47-0b1a-489a-b829-739d97a05571) |백엔드 - 직원 통계 조회 |
@@ -102,4 +102,4 @@
 
 ## ✔ 최종 발표 자료
 
-[최종 발표 자료](HRBANK_최종발표자료.pdf)
+➡️ [최종 발표 자료](HRBANK_최종발표자료.pdf)
