@@ -83,6 +83,7 @@
 <br />
 
 [시연 영상](docs/videos/6팀_hrbank_시연영상.mp4)
+
 [배포 링크](https://sb02-hrbank-team6-production.up.railway.app)
 
 <br />
