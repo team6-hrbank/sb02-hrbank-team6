@@ -8,6 +8,8 @@
 
 <h3>기업의 인적 자원을 안전하게 관리하는 인사 관리 시스템</h3>
 
+<p>팀 전체 고민: 대규모 데이터를 효율적으로 처리하기</p>
+
 </div>
 
 <br />
@@ -22,6 +24,7 @@
 <img src="https://img.shields.io/badge/MapStruct-7D4698?style=for-the-badge&logo=java&logoColor=white" alt="MapStruct">
 <img src="https://img.shields.io/badge/Swagger%20UI-85EA2D?style=for-the-badge&logo=swagger&logoColor=black" alt="Swagger UI">
 <img src="https://img.shields.io/badge/Railway-0B0D0E?style=for-the-badge&logo=railway&logoColor=white" alt="Railway">
+<img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker">
 </div>
 
 </div>
@@ -73,11 +76,20 @@
 
 <br />
 
-## 🖥️ 프로젝트 결과물 (시연 화면, 시연 링크, 배포 링크)
+## 🖥️ 프로젝트 결과물
+### 대시보드
 <img width="1710" alt="대시보드" src="https://github.com/user-attachments/assets/c68ea2a8-50d1-48cd-b79b-f4730c2bd4f4" />
+
+### 부서 관리
 <img width="1710" alt="부서관리" src="https://github.com/user-attachments/assets/884ad64b-3dc1-4bc7-a57d-0b255a68e3ba" />
+
+### 직원 관리
 <img width="1710" alt="직원 관리" src="https://github.com/user-attachments/assets/a402a096-bb28-4f30-b6d5-e40825decf1e" />
+
+### 수정 이력
 <img width="1710" alt="수정이력" src="https://github.com/user-attachments/assets/de435111-14ad-4bb9-a933-b2ac7c995279" />
+
+### 데이터 백업
 <img width="1710" alt="데이터백업" src="https://github.com/user-attachments/assets/66fc2125-1f10-4d6f-92fa-9119734529c4" />
 
 <br />
@@ -97,6 +109,10 @@
 |**[도효림](https://github.com/coderimspace)**| ![도효림_6팀](https://github.com/user-attachments/assets/915085af-ffa0-4ec0-929d-c71305e2006e) |백엔드 - 직원 정보 관리 |
 |**[양성준](https://github.com/GogiDosirak)**|![양성준_6팀](https://github.com/user-attachments/assets/16eb9a47-0b1a-489a-b829-739d97a05571) |백엔드 - 직원 통계 조회 |
 |**[최규원](https://github.com/GYUWON-CHOI)**|![최규원_6팀](https://github.com/user-attachments/assets/08a98183-e718-44fd-8692-ec24a83c0ddc) |백엔드 - 부서 정보 관리 |
+
+<br />
+
+![단체샷](https://github.com/user-attachments/assets/27c4175f-3b97-4954-9004-d684f9bb57d9)
 
 <br />
 
